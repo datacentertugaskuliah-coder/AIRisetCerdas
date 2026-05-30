@@ -57,3 +57,39 @@ ALAS-v7.0/
 ├── .gitignore
 └── .gitattributes
 ```
+
+## Login berbasis ACCESS_KEY (Streamlit Cloud Secrets Manager)
+
+Aplikasi ini dilindungi gerbang login. Dashboard hanya dikirim ke browser
+setelah kunci akses benar. Kunci TIDAK disimpan di kode atau repositori.
+
+### Mengaktifkan di Streamlit Cloud
+
+1. Buka aplikasi Anda di share.streamlit.io.
+2. Klik menu kanan bawah (tiga titik) -> **Settings** -> **Secrets**.
+3. Masukkan baris berikut, lalu **Save**:
+
+   ```toml
+   ACCESS_KEY = "kunci-rahasia-anda"
+   ```
+
+4. Aplikasi otomatis dimuat ulang. Halaman login akan meminta kunci tersebut.
+
+### Menjalankan secara lokal
+
+1. Salin `.streamlit/secrets.toml.example` menjadi `.streamlit/secrets.toml`.
+2. Isi `ACCESS_KEY` dengan kunci Anda.
+3. Jalankan `streamlit run app.py`.
+
+Berkas `.streamlit/secrets.toml` sudah masuk `.gitignore` sehingga tidak ikut
+ter-commit.
+
+### Catatan keamanan (jujur)
+
+- Login ini melindungi AKSES masuk. Setelah seseorang berhasil masuk, isi
+  dashboard berada di browser mereka. Login mencegah orang masuk, bukan
+  menyembunyikan isi dari orang yang sudah masuk.
+- Perbandingan kunci memakai `hmac.compare_digest` (tahan serangan timing).
+- Ada pembatasan 5 percobaan per sesi dengan jeda kunci 60 detik.
+- Untuk keamanan lebih kuat (mis. banyak pengguna, peran berbeda), pertimbangkan
+  autentikasi resmi seperti OIDC/SSO bawaan Streamlit, bukan satu kunci bersama.
