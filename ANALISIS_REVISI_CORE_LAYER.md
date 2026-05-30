@@ -1,157 +1,128 @@
-# Analisis Revisi Core Layer — ALAS v5.0 → v6.0
+# Analisis Revisi Core Layer — ALAS v6.0 → v7.0
 
-Dokumen ini berisi analisis logis dan komprehensif atas Core Layer ALAS v5.0,
-disertai konsep algoritma dan *pseudocode* sebagai dasar *brainstorming* revisi,
-lalu lima rekomendasi perbaikan yang diturunkan dari analisis tersebut. Hasil
-rekomendasi inilah yang kemudian diwujudkan dalam Core Layer v6.0.
+Dokumen ini berisi analisis logis dan komprehensif untuk rombak ALAS v7.0,
+disertai konsep algoritma dan *pseudocode* sebagai dasar *brainstorming*,
+lalu lima rekomendasi perbaikan yang seluruhnya diwujudkan dalam Core Layer v7.0.
 
-Prinsip kerja dokumen ini: pertahankan apa yang sudah baik, perbaiki yang lemah,
-dan kembangkan yang berpotensi — tanpa halusinasi dan tanpa data palsu.
-
----
-
-## Bagian 1 — Analisis Logis Kondisi Core Layer v5.0
-
-### 1.1 Apa yang sudah baik (DIPERTAHANKAN, tidak direvisi)
-
-Komponen berikut sudah kuat secara logis dan tetap dipertahankan apa adanya,
-karena merevisinya justru menurunkan kualitas:
-
-1. Sistem penanda epistemik 6 level (Seksi B.4). Ini fondasi anti-halusinasi
-   yang jelas dan dapat ditegakkan.
-2. Aturan "data tidak ada → nyatakan eksplisit, jangan mengarang" (Seksi E.2).
-3. Aturan integritas kuantitas — dilarang fabrikasi item demi mencapai target
-   (Seksi E.3).
-4. Firewall Integritas Akademik (Seksi K) dengan 4 batas tidak dapat dilanggar.
-5. Standar pengungkapan AI (Seksi O.2) sesuai kebijakan jurnal.
-6. Protokol PUBEI untuk penulisan istilah asing (Seksi C).
-7. Gerbang kualitas dan dependensi lintas-modul (Seksi G).
-
-### 1.2 Masalah yang ditemukan (terverifikasi dari kode, bukan asumsi)
-
-| Kode | Temuan | Bukti |
-|------|--------|-------|
-| P1 | Klaim "OBF Engine v3.0, 5 lapis, 80+ entri" tidak sesuai implementasi | Kode berlabel `OBFUSCATION ENGINE v1.0`; kamus sinonim ~35 entri; hanya 2 lapis nyata (sinonim + token), bukan 5 |
-| P2 | Inkonsistensi versi & tahun | Repo `v4.0/v4.1`, konten `v5.0`; hak cipta 2024/2025/2026 bercampur; M0 menyebut "Core Layer v2.0" |
-| P3 | Core Layer mentah tampil penuh di UI | 38 KB teks terlihat pengguna; membingungkan dan mengaburkan nilai produk |
-| P4 | Tidak ada ringkasan terstruktur "apa yang dikembangkan" | Pengguna tidak punya peta cepat fitur sistem |
-| P5 | Prosa kaku/templatik di sebagian instruksi | Banyak kalimat perintah beruntun tanpa keterbacaan manusiawi |
-
-### 1.3 Keputusan etis yang ditegakkan dalam revisi
-
-Permintaan "anti-deteksi AI detector / menyamar sebagai manusia" TIDAK
-diimplementasikan, karena bertentangan langsung dengan Seksi K (Firewall
-Integritas) dan Seksi O.2 (Pengungkapan AI) yang menjadi nilai inti ALAS, dan
-karena klaim "tidak terdeteksi" tidak dapat dijamin sehingga menanamkannya =
-menanam klaim palsu. Sebagai gantinya, revisi menambahkan protokol GAYA
-PENULISAN NATURAL yang sah: prosa luwes, variasi panjang kalimat, tanda baca
-rapi, bebas ciri robotik — peningkatan kualitas tanpa penyamaran.
+Prinsip: pertahankan yang sudah baik, perbaiki yang lemah, kembangkan yang
+berpotensi. Tanpa halusinasi, tanpa data palsu, integritas dijaga.
 
 ---
 
-## Bagian 2 — Konsep Algoritma & Pseudocode (Brainstorming Revisi)
+## Bagian 1 — Analisis Logis
 
-### 2.1 Algoritma penyembunyian Core Layer (UI rapi, mesin tetap jalan)
+### 1.1 Yang dipertahankan (tidak direvisi karena sudah kuat)
+1. Sistem penanda epistemik 6 level (Seksi B.4) — fondasi anti-halusinasi.
+2. Aturan data tidak ada → nyatakan eksplisit (Seksi E.2).
+3. Aturan integritas kuantitas — dilarang fabrikasi demi target (Seksi E.3).
+4. Firewall Integritas Akademik (Seksi K) — 4 batas tak dapat dilanggar.
+5. Pengungkapan AI sesuai kebijakan jurnal (Seksi O.2).
+6. Protokol PUBEI (Seksi C) dan Gerbang Kualitas (Seksi G).
+7. Seksi P (Gaya Penulisan Natural) dari v6.0 — dipertahankan dan diperkuat.
 
-Tujuan: pengguna melihat dashboard ringkas, BUKAN 38 KB teks mentah; namun saat
-menyalin prompt, Core Layer tetap ikut tersalin utuh agar AI tujuan tetap
-menerima instruksi lengkap.
+### 1.2 Perubahan yang diminta (semua terverifikasi dampaknya)
+| Kode | Perubahan | Dampak logis |
+|------|-----------|--------------|
+| C1 | Penataan ulang modul: 8=Dataset, 9=Statistik, 10=IMRAD | Dependensi & registri Seksi H, G.2 harus ikut diperbarui |
+| C2 | Pilihan bidang ilmu eksplisit (Umum, Soshum, Saintek, Ilmu Komputer) | Mesin Konteks Seksi L parameter 1 |
+| C3 | Fokus jenjang & hibah (Skripsi, Tesis, Disertasi, BIMA, BRIN) | Mesin Konteks Seksi L parameter 2 & 3, daftar skema |
+| C4 | Judul aplikasi → "ALAS — Asisten Riset Akademik" | Branding di seluruh berkas |
+| C5 | Versi → v7.0 | Konsistensi versi |
 
+### 1.3 Keputusan etis (ditegakkan konsisten)
+Permintaan "anti-deteksi AI detector / menyamar manusia" TIDAK diimplementasikan.
+Alasan: bertentangan dengan Seksi K dan O.2 (nilai inti ALAS), dan klaim
+"tidak terdeteksi" tak dapat dijamin sehingga menanamnya = klaim palsu.
+Gantinya: Seksi P (gaya natural sah) tetap dipakai.
+
+---
+
+## Bagian 2 — Konsep Algoritma & Pseudocode
+
+### 2.1 Penataan ulang modul (inti permintaan C1)
+Pemetaan lama → baru, isi ikut pindah:
 ```
-ALGORITMA tampil_core_layer_tersembunyi:
-    INPUT  : data_core (teks Core Layer), aksi_pengguna
-    OUTPUT : tampilan UI, teks_salin
+  Dataset      : M9_lama  -> M8_baru
+  Statistik    : M10_lama -> M9_baru
+  IMRAD        : M8_lama  -> M10_baru
+```
+```
+ALGORITMA petakan_ulang_modul:
+    peta := { 'm8':'m10', 'm9':'m8', 'm10':'m9' }   # sumber -> tujuan
+    UNTUK setiap (lama, baru) DALAM peta:
+        konten_baru[baru] := konten_lama[lama]
+    # perbarui rujukan internal nomor modul di teks
+    UNTUK setiap konten:
+        ganti "Modul 8" (IMRAD)    -> "Modul 10"
+        ganti "Modul 9" (Dataset)  -> "Modul 8"
+        ganti "Modul 10" (Statistik)-> "Modul 9"
+    perbarui registri Seksi H dan urutan dependensi Seksi G.2/H.4
+    VERIFIKASI: tidak ada nomor modul yatim atau rujukan silang yang salah
+```
+Justifikasi: rotasi 3-siklus. Karena IMRAD (penulisan artikel) kini jadi modul
+terakhir (10), urutan kerja jadi lebih logis: cari data (8) → analisis statistik
+(9) → tulis artikel (10).
 
-    # Pemisahan tampilan dari muatan
-    simpan data_core di penyimpanan tak-terlihat (JSON <script>, bukan <div>)
-    render ke UI -> KARTU_RINGKAS(daftar fitur, status, statistik)
-    JANGAN render data_core sebagai teks terlihat
-
-    KETIKA pengguna menekan "Salin Prompt":
-        teks_salin <- buildContextInjection() + data_core + prompt_modul
-        salin teks_salin ke clipboard
-        # Core Layer ikut tersalin meski tak pernah tampil di layar
-    KEMBALIKAN teks_salin
+### 2.2 Pemilihan bidang ilmu & kalibrasi (C2, C3)
+```
+ALGORITMA kalibrasi_konteks(bidang, jenjang, target):
+    JIKA bidang == "Ilmu Komputer":
+        eligibilitas_M9_statistik := TIDAK   # statistik multivariat tak wajib
+        sarankan := "cross-validation / benchmark ML"
+    LAIN:
+        eligibilitas_M9_statistik := YA
+    novelty_min := { Skripsi:1, Tesis:2, Disertasi:3, Hibah:2 }[jenjang]
+    skema := pilih_skema(target)   # PDP/PFR/Terapan/Prototipe/BRIN/Scopus/SINTA
+    KEMBALIKAN profil_konteks
 ```
 
-Justifikasi logis: memisahkan *presentation layer* dari *payload layer*. Ini
-pola umum dan sah (mis. data tersembunyi di state aplikasi). Berbeda dengan
-"sembunyikan dari AI detector" yang menyangkut penipuan keluaran — yang ditolak.
-
-### 2.2 Algoritma dashboard informasi pengembangan
-
+### 2.3 Core Layer tersembunyi (tetap dipertahankan dari v6.0)
 ```
-ALGORITMA dashboard_pengembangan:
-    daftar_fitur <- [ {nama, status:'baru'|'ditingkatkan'|'dipertahankan', ringkas} ]
-    UNTUK setiap fitur DALAM daftar_fitur:
-        render KARTU(ikon_status, nama, ringkas)
-    render GRAFIK_RINGKAS(jumlah modul, seksi, level epistemik)
-    # Visual sederhana, dapat dipahami lintas latar (general world)
+ALGORITMA core_tersembunyi:
+    simpan core sebagai DATA (bukan teks terlihat)
+    render UI -> dashboard ringkas
+    KETIKA "Salin": teks := injeksi_konteks + core + prompt_modul
+    # core ikut tersalin meski tak tampil
 ```
 
-### 2.3 Algoritma protokol gaya penulisan natural (legitimate)
-
+### 2.4 Gaya natural sah (Seksi P, dipertahankan)
 ```
-ALGORITMA gaya_natural(teks_keluaran):
-    # Bukan anti-deteksi; murni kualitas keterbacaan
-    PASTIKAN variasi panjang kalimat (pendek-sedang-panjang berselang)
-    HINDARI pembuka klise berulang ("Dalam era ...", "Di sisi lain ...")
-    GUNAKAN hanya tanda baca dalam himpunan-diizinkan:
-        { . , ; : - ? ! " " ' ' ( ) [ ] / }
-    TEGAKKAN PUBEI (istilah asing tak diserap -> miring)
-    PERTAHANKAN semua penanda epistemik [Pengarang, Tahun] / [Analisis]
-    JANGAN mengklaim teks "bukan AI" atau "lolos detektor"  # dilarang
-    KEMBALIKAN teks_keluaran terpoles
-```
-
-### 2.4 Algoritma konsistensi versi (perbaikan P2)
-
-```
-ALGORITMA kunci_versi(V := "6.0", TAHUN := "2026"):
-    UNTUK setiap berkas DALAM proyek:
-        ganti semua "v5.0"/"v4.x"/"v2.0" -> V
-        ganti hak cipta bercampur -> "2024-" + TAHUN
-    VERIFIKASI: tidak ada lagi token versi lama tersisa
+ALGORITMA gaya_natural(teks):
+    variasikan panjang kalimat; hindari klise; PUBEI aktif
+    tanda baca hanya: . , ; : - ? ! " " ' ' ( ) [ ] / ...
+    JANGAN klaim "bukan AI" atau "lolos detektor"   # dilarang
+    pertahankan semua penanda epistemik
 ```
 
 ---
 
-## Bagian 3 — Lima Rekomendasi Perbaikan (Hasil Analisis)
+## Bagian 3 — Lima Rekomendasi Perbaikan
 
-### Rekomendasi 1 — Sembunyikan Core Layer dari UI, pertahankan fungsinya
-Pisahkan lapisan tampilan dari muatan. Core Layer disimpan sebagai data, bukan
-teks terlihat. Saat "Salin", Core Layer tetap ikut tersalin penuh.
-Status: DITERAPKAN di v6.0 (lihat Seksi mesin salin).
+### Rekomendasi 1 — Penataan ulang modul yang konsisten
+Tukar nomor beserta isi (8=Dataset, 9=Statistik, 10=IMRAD), perbarui seluruh
+rujukan silang dan registri. Status: DITERAPKAN.
 
-### Rekomendasi 2 — Tambahkan Seksi P: Protokol Gaya Penulisan Natural
-Seksi baru yang mengatur prosa manusiawi yang sah: variasi kalimat, tanda baca
-terbatas pada himpunan yang diminta, larangan klise, penegakan PUBEI. TANPA
-klaim anti-deteksi. Status: DITERAPKAN sebagai Seksi P.
+### Rekomendasi 2 — Pemilih bidang ilmu eksplisit di Beranda
+Empat bidang (Umum, Soshum, Saintek, Ilmu Komputer) sebagai parameter pertama
+Mesin Konteks, dengan aturan eligibilitas modul statistik. Status: DITERAPKAN.
 
-### Rekomendasi 3 — Luruskan klaim OBF agar jujur (perbaikan P1)
-Label diturunkan menjadi sesuai implementasi nyata, atau fitur dimatikan default
-dan dijelaskan apa adanya. Tidak ada lagi klaim "5 lapis/80+/v3.0" yang palsu.
-Status: DITERAPKAN — deskripsi OBF disesuaikan dengan kode dan dimatikan default.
+### Rekomendasi 3 — Fokus jenjang & hibah yang jelas
+Skripsi, Tesis, Disertasi + skema BIMA (PDP, PFR, Terapan Model, Prototipe) dan
+BRIN tampil sebagai pilihan terstruktur. Status: DITERAPKAN.
 
-### Rekomendasi 4 — Dashboard pengembangan + visualisasi yang mudah dipahami
-Halaman Beranda menampilkan ringkasan "apa yang dikembangkan", kartu fitur,
-serta diagram alur 12 modul yang sederhana dan lintas-bahasa.
-Status: DITERAPKAN di Beranda v6.0.
+### Rekomendasi 4 — Dashboard interaktif + visualisasi alur baru
+Beranda menampilkan ringkasan pengembangan dan diagram alur 12 modul dengan
+urutan baru, mudah dipahami lintas latar. Status: DITERAPKAN.
 
-### Rekomendasi 5 — Kunci konsistensi versi & tahun (perbaikan P2)
-Seluruh proyek diseragamkan ke v6.0 / 2024-2026, artefak konflik merge dibuang.
-Status: DITERAPKAN di seluruh berkas.
+### Rekomendasi 5 — Core Layer tersembunyi + Seksi P diperkuat, versi v7.0
+Core Layer tetap berjalan di balik layar; Seksi P dipertahankan; seluruh berkas
+diseragamkan ke v7.0. Status: DITERAPKAN.
 
 ---
 
-## Bagian 4 — Ringkasan Peningkatan v6.0 vs v5.0
-
-- Core Layer: 15 seksi (A-O) -> 16 seksi (A-P), penambahan Seksi P (Gaya Natural).
-- UI: Core Layer mentah tampil -> tersembunyi; diganti dashboard fitur.
-- Klaim OBF: tidak akurat -> jujur sesuai kode.
-- Versi: bercampur -> seragam v6.0 / 2024-2026.
-- Integritas: dipertahankan penuh (Seksi E, K, O.2 tetap utuh).
-
-Semua perubahan dapat ditelusuri ke temuan terverifikasi pada Bagian 1.2 dan
-keputusan etis pada Bagian 1.3. Tidak ada fitur yang diklaim melebihi yang
-benar-benar diimplementasikan.
+## Bagian 4 — Ringkasan Peningkatan v7.0 vs v6.0
+- Penomoran modul: 8=Dataset, 9=Statistik, 10=IMRAD (urutan kerja lebih logis).
+- Pemilih bidang ilmu & jenjang/hibah eksplisit di Beranda.
+- Judul: "ALAS — Asisten Riset Akademik".
+- Versi seragam v7.0; integritas (Seksi E, K, O.2, P) tetap utuh.
+- Tidak ada fitur yang diklaim melebihi implementasi nyata.

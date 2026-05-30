@@ -1,24 +1,23 @@
 """
-ALAS v6.0 — Academic Literature Analysis System
+ALAS v7.0 — Asisten Riset Akademik
 (c) 2024-2026 Alhumaira Store | obrolanpintar1987@gmail.com
 
-Pembungkus Streamlit untuk dashboard ALAS v6.0. Aplikasi memuat satu berkas
-dashboard.html dan menampilkannya secara penuh. Core Layer disimpan di dalam
-dashboard sebagai data tersembunyi dan tetap ikut tersalin saat pengguna
-menekan tombol "Salin Prompt".
+Pembungkus Streamlit untuk dashboard ALAS v7.0. Memuat satu berkas
+dashboard.html dan menampilkannya penuh. Core Layer disimpan sebagai data
+tersembunyi dan tetap ikut tersalin saat pengguna menekan "Salin Prompt".
 """
 import streamlit as st
 import streamlit.components.v1 as components
 from pathlib import Path
 
 st.set_page_config(
-    page_title="ALAS v6.0",
+    page_title="ALAS v7.0 - Asisten Riset Akademik",
     page_icon="\U0001F4DA",
     layout="wide",
     initial_sidebar_state="collapsed",
     menu_items={
         "About": (
-            "ALAS v6.0 - Academic Literature Analysis System\n"
+            "ALAS v7.0 - Asisten Riset Akademik\n"
             "16 Seksi (A-P) - 12 Modul - Core Layer Tersembunyi\n"
             "(c) 2024-2026 Alhumaira Store\n"
             "obrolanpintar1987@gmail.com"
@@ -26,7 +25,6 @@ st.set_page_config(
     },
 )
 
-# Sembunyikan kerangka antarmuka bawaan Streamlit agar dashboard tampil penuh.
 st.markdown(
     """<style>
 #MainMenu, header, footer,
@@ -47,8 +45,4 @@ if not html_path.exists():
     st.error("Berkas dashboard.html tidak ditemukan.")
     st.stop()
 
-components.html(
-    html_path.read_text(encoding="utf-8"),
-    height=5200,
-    scrolling=True,
-)
+components.html(html_path.read_text(encoding="utf-8"), height=5400, scrolling=True)
