@@ -1,8 +1,8 @@
 """
-ALAS v8.0 — Asisten Riset Akademik
+ALAS v8.1 — Asisten Riset Akademik
 (c) 2024-2026 Alhumaira Store | obrolanpintar1987@gmail.com
 
-Pembungkus Streamlit untuk dashboard ALAS v8.0 dengan gerbang login berbasis
+Pembungkus Streamlit untuk dashboard ALAS v8.1 dengan gerbang login berbasis
 ACCESS_KEY yang disimpan di Streamlit Cloud Secrets Manager.
 
 Catatan keamanan:
@@ -20,13 +20,13 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 st.set_page_config(
-    page_title="ALAS v8.0 - Asisten Riset Akademik",
+    page_title="ALAS v8.1 - Asisten Riset Akademik",
     page_icon="\U0001F4DA",
     layout="wide",
     initial_sidebar_state="collapsed",
     menu_items={
         "About": (
-            "ALAS v8.0 - Asisten Riset Akademik\n"
+            "ALAS v8.1 - Asisten Riset Akademik\n"
             "16 Seksi (A-P) - 12 Modul - Core Layer Tersembunyi\n"
             "(c) 2024-2026 Alhumaira Store\n"
             "obrolanpintar1987@gmail.com"
@@ -78,7 +78,7 @@ def _render_login() -> None:
     st.markdown(
         '<div class="alas-card">'
         '<div class="alas-logo">AL</div>'
-        '<div class="alas-title">ALAS v8.0</div>'
+        '<div class="alas-title">ALAS v8.1</div>'
         '<div class="alas-sub">Asisten Riset Akademik &middot; Akses Terbatas</div>',
         unsafe_allow_html=True,
     )

@@ -1,4 +1,4 @@
-# ALAS v8.0 — Asisten Riset Akademik
+# ALAS v8.1 — Asisten Riset Akademik
 
 (c) 2024-2026 **Alhumaira Store** · obrolanpintar1987@gmail.com
 
@@ -6,7 +6,7 @@ Penyusun *prompt* akademik untuk peneliti Indonesia, dari skripsi hingga hibah
 BIMA dan BRIN. Pilih bidang, jenjang, dan modul; salin ke asisten AI pilihan
 Anda. Core Layer bekerja di balik layar.
 
-## Apa yang baru di v8.0 (fokus Modul 10 — IMRAD)
+## Apa yang baru di v8.1 (fokus Modul 10 — IMRAD)
 
 Modul 10 (Draft Artikel IMRAD) ditulis ulang penuh:
 
@@ -63,7 +63,7 @@ share.streamlit.io.
 ## Struktur berkas
 
 ```
-ALAS-v8.0/
+ALAS-v8.1/
 ├── app.py                          Pembungkus + login ACCESS_KEY
 ├── dashboard.html                  Antarmuka + Core Layer tersembunyi
 ├── requirements.txt
