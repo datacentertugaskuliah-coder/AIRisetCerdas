@@ -1,4 +1,4 @@
-# ALAS v8.4 — Asisten Riset Akademik
+# ALAS v8.5 — Asisten Riset Akademik
 
 (c) 2024-2026 **Alhumaira Store** · obrolanpintar1987@gmail.com
 
@@ -6,55 +6,55 @@ Penyusun *prompt* akademik untuk peneliti Indonesia, dari skripsi hingga hibah
 BIMA dan BRIN. Pilih bidang, jenjang, dan modul; salin ke asisten AI pilihan
 Anda. Core Layer bekerja di balik layar.
 
-## Apa yang baru di v8.4 — Modul 12: Proposal BRIN RIIM Kompetisi
+## Apa yang baru di v8.5 — Modul 13: Proposal Skripsi
 
-Modul baru untuk menyusun proposal BRIN skema RIIM Kompetisi, melengkapi Modul
-11 (BIMA). Melanjutkan Modul 0-7 lalu memakai sumber Modul 8 (rencana dataset)
-atau Modul 9 (rancangan analisis).
+Modul baru untuk menyusun draf proposal/laporan skripsi, melanjutkan Modul 0-7
+lalu memakai sumber Modul 8 (rencana dataset) atau Modul 9 (rancangan analisis).
 
-- **Workflow bertahap.** Modul 12 menarik kesenjangan dari Modul 4 dan korpus
-  dari Modul 1, mengonfirmasi *novelty* lebih dulu, lalu menyusun bab secara
-  berurutan. Tersedia *fallback* "langsung saja" agar tetap jalan di semua AI.
-- **Struktur khas RIIM** (sesuai pedoman BRIN): Kerangka Berpikir dan Nilai
-  Strategis, Susunan Tim Periset, Metode (dengan diagram alir algoritma dan
-  *novelty*), Luaran dan Indikator Kinerja Riset, TKT (rentang 3-6), Jadwal
-  (maksimal 3 tahun), RAB, Uji Silang metode-luaran-anggaran, Daftar Pustaka
-  APA, Ringkasan (disusun terakhir), dan Mitigasi Risiko.
-- **Metode bercabang per bidang:** Saintek/Ilmu Komputer memakai pengembangan
-  model dengan flowchart; Umum/Sosial-Humaniora memakai empat metode populer.
-  Novelty: satu untuk 1 tahun, dua untuk multiyear.
-- **Tema fokus BRIN** sebagai referensi (pangan, kesehatan, energi, dan lain
-  lain); pengguna memilih satu dan menautkan topiknya.
-- **Gerbang Kesiapan Administratif:** pengingat eligibilitas (ketua minimal S3,
-  rekam jejak sesuai tema, batas keterlibatan proposal, CV tim).
+- **Dua tahap:** Tahap 1 Seminar Proposal (Bab 1-3), Tahap 2 Seminar Hasil
+  (Bab 1-5). Saat Tahap 1 dipilih, kerangka Bab 4-5 tidak dimunculkan.
+- **Bab 1 Pendahuluan:** latar belakang, rumusan masalah, batasan, tujuan,
+  manfaat, sistematika penulisan.
+- **Bab 2 Kajian Pustaka:** heading dan empat sub-heading terstruktur, masing
+  masing ditutup lima pertanyaan literatur Bahasa Inggris sebagai bagian naskah,
+  sitasi gaya APA.
+- **Bab 3 Metodologi:** bercabang bidang (Saintek/Ilmu Komputer dengan flowchart;
+  Umum/Sosial-Humaniora) dan bercabang jenis penelitian (Kuantitatif, Kualitatif,
+  Pengembangan/R&D).
+- **Bab 4-5:** kerangka bertanda "[isi dari hasil penelitian Anda]"; Bab 5
+  menyesuaikan jenis (data angka untuk kuantitatif, temuan tematik untuk
+  kualitatif).
+- **Penjaga koherensi:** rumusan masalah menjadi benang merah (dijawab di Bab 4,
+  disimpulkan di Bab 5); konsistensi istilah dari glosarium Modul 1; konsistensi
+  sitasi Bab 2 dengan Daftar Pustaka; gerbang kelengkapan per tahap.
+- **Kanvas baru per bab:** tiap bab ditulis di kanvas/dokumen terpisah agar tidak
+  menabrak batas panjang (warisan protokol v8.4 yang diperkuat).
 
 ## Integritas
 
-- Semua angka (jumlah kata, dana, RAB, pagu, TKT, masa, peringkat jurnal)
-  ditandai "[verifikasi pedoman BRIN — pendanaan-risnov.brin.go.id]".
-- DOI hanya dicantumkan dari korpus; jika ragu ditandai
-  "[DOI perlu verifikasi di doi.org]".
-- Indikator kinerja, pemetaan TKT, dan gerbang administratif adalah alat bantu
-  dan pengingat, BUKAN jaminan kelolosan. Keputusan pendanaan tergantung
-  kompetisi, kuota, rekam jejak, dan penilaian reviewer BRIN.
+- Angka hasil tidak dikarang; ditandai "[isi dari hasil penelitian Anda]".
+- Standar khas kampus ditandai "[sesuaikan panduan kampus]".
+- DOI hanya dari korpus; jika ragu "[DOI perlu verifikasi di doi.org]".
+- Gerbang kelengkapan adalah alat bantu, BUKAN jaminan lulus seminar.
 - Firewall Integritas (Seksi K), anti-halusinasi (Seksi E), pengungkapan AI
   (Seksi O.2), dan Seksi P (Gaya Natural) tetap berlaku penuh.
 
-## Daftar modul (14 total)
+## Daftar modul (15 total)
 
-Core Layer, lalu Modul 0-12: pencarian literatur, intake, kontradiksi, rantai
+Core Layer, lalu Modul 0-13: pencarian literatur, intake, kontradiksi, rantai
 sitasi, kesenjangan, audit metodologi, rekomendasi judul, hibah dan publikasi,
 rekomendasi dataset (8), statistik multivariat (9), draf artikel IMRAD (10),
-proposal hibah BIMA (11), dan proposal BRIN RIIM Kompetisi (12).
+proposal hibah BIMA (11), proposal BRIN RIIM Kompetisi (12), dan proposal
+skripsi (13).
 
 ## Login berbasis ACCESS_KEY (Streamlit Cloud Secrets Manager)
 
 1. Buka aplikasi di share.streamlit.io.
-2. Menu tiga titik -> **Settings** -> **Secrets**.
-3. Masukkan, lalu **Save**:
-   ```toml
+2. Menu tiga titik -> Settings -> Secrets.
+3. Masukkan, lalu Save:
+
    ACCESS_KEY = "kunci-rahasia-anda"
-   ```
+
 4. Halaman login akan meminta kunci tersebut.
 
 Untuk uji lokal: salin `.streamlit/secrets.toml.example` menjadi
@@ -62,10 +62,8 @@ Untuk uji lokal: salin `.streamlit/secrets.toml.example` menjadi
 
 ## Cara menjalankan secara lokal
 
-```bash
-pip install -r requirements.txt
-streamlit run app.py
-```
+    pip install -r requirements.txt
+    streamlit run app.py
 
 ## Deploy ke Streamlit Cloud
 
@@ -74,14 +72,12 @@ share.streamlit.io.
 
 ## Struktur berkas
 
-```
-ALAS-v8.4/
-├── app.py                          Pembungkus + login ACCESS_KEY
-├── dashboard.html                  Antarmuka + Core Layer tersembunyi
-├── requirements.txt
-├── ANALISIS_REVISI_CORE_LAYER.md   Analisis, pseudocode, rekomendasi
-├── .streamlit/config.toml
-├── .streamlit/secrets.toml.example
-├── .gitignore
-└── .gitattributes
-```
+    ALAS-v8.5/
+    |- app.py
+    |- dashboard.html
+    |- requirements.txt
+    |- ANALISIS_REVISI_CORE_LAYER.md
+    |- .streamlit/config.toml
+    |- .streamlit/secrets.toml.example
+    |- .gitignore
+    |- .gitattributes
