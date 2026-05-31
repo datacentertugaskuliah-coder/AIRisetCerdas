@@ -1,4 +1,4 @@
-# ALAS v8.2 — Asisten Riset Akademik
+# ALAS v8.3 — Asisten Riset Akademik
 
 (c) 2024-2026 **Alhumaira Store** · obrolanpintar1987@gmail.com
 
@@ -6,38 +6,46 @@ Penyusun *prompt* akademik untuk peneliti Indonesia, dari skripsi hingga hibah
 BIMA dan BRIN. Pilih bidang, jenjang, dan modul; salin ke asisten AI pilihan
 Anda. Core Layer bekerja di balik layar.
 
-## Apa yang baru di v8.2 — Modul 11: Proposal Hibah BIMA
+## Apa yang baru di v8.3 — Modul 12: Proposal BRIN RIIM Kompetisi
 
-Modul baru untuk menyusun proposal hibah BIMA, melanjutkan Modul 0-7 lalu
-memakai sumber Modul 8 (rencana dataset) atau Modul 9 (rancangan analisis).
+Modul baru untuk menyusun proposal BRIN skema RIIM Kompetisi, melengkapi Modul
+11 (BIMA). Melanjutkan Modul 0-7 lalu memakai sumber Modul 8 (rencana dataset)
+atau Modul 9 (rancangan analisis).
 
-- **Empat sub-template:** PDP, PFR (Penelitian Dasar); Terapan Luaran Model,
-  Terapan Luaran Prototipe (Penelitian Terapan).
-- **Struktur mengikuti template BIMA:** Judul (maks 20 kata), Ringkasan
-  (300 kata), 5 kata kunci satu kata, Pendahuluan (1000 kata: latar belakang
-  dan 3 rumusan masalah, pendekatan, state of the art dan kebaruan, roadmap
-  5 tahun gaya fishbone), Metode (1000 kata dengan diagram alir algoritma),
-  Hasil yang Diharapkan, TKT, Jadwal (13 kegiatan), Daftar Pustaka APA.
+- **Workflow bertahap.** Modul 12 menarik kesenjangan dari Modul 4 dan korpus
+  dari Modul 1, mengonfirmasi *novelty* lebih dulu, lalu menyusun bab secara
+  berurutan. Tersedia *fallback* "langsung saja" agar tetap jalan di semua AI.
+- **Struktur khas RIIM** (sesuai pedoman BRIN): Kerangka Berpikir dan Nilai
+  Strategis, Susunan Tim Periset, Metode (dengan diagram alir algoritma dan
+  *novelty*), Luaran dan Indikator Kinerja Riset, TKT (rentang 3-6), Jadwal
+  (maksimal 3 tahun), RAB, Uji Silang metode-luaran-anggaran, Daftar Pustaka
+  APA, Ringkasan (disusun terakhir), dan Mitigasi Risiko.
 - **Metode bercabang per bidang:** Saintek/Ilmu Komputer memakai pengembangan
-  model dengan flowchart algoritma; Umum/Sosial-Humaniora memakai empat metode
-  populer. Novelty ditandai garis putus-putus berwarna: satu novelty untuk
-  penelitian 1 tahun, dua novelty untuk multiyear.
-- **Khusus skema Terapan:** Strategi Pencapaian TKT (awal ke target), Rencana
-  Kemitraan (Surat Kesediaan Mitra dan MoU, wajib), dan luaran model/prototipe
-  beserta HKI.
-- **Bobot penilaian per skema:** Modul 11 menyelaraskan penekanan penulisan
-  dengan kriteria reviewer BIMA. Ini penyelaras kriteria, BUKAN jaminan lolos;
-  kelolosan tergantung kompetisi, kuota, rekam jejak, dan penilaian reviewer.
+  model dengan flowchart; Umum/Sosial-Humaniora memakai empat metode populer.
+  Novelty: satu untuk 1 tahun, dua untuk multiyear.
+- **Tema fokus BRIN** sebagai referensi (pangan, kesehatan, energi, dan lain
+  lain); pengguna memilih satu dan menautkan topiknya.
+- **Gerbang Kesiapan Administratif:** pengingat eligibilitas (ketua minimal S3,
+  rekam jejak sesuai tema, batas keterlibatan proposal, CV tim).
 
 ## Integritas
 
-- Semua angka panduan (jumlah kata, dana, RAB, TKT, masa penelitian) ditandai
-  "[verifikasi panduan BIMA terbaru — bima.kemdiktisaintek.go.id]" karena dapat
-  berubah tiap tahun.
+- Semua angka (jumlah kata, dana, RAB, pagu, TKT, masa, peringkat jurnal)
+  ditandai "[verifikasi pedoman BRIN — pendanaan-risnov.brin.go.id]".
 - DOI hanya dicantumkan dari korpus; jika ragu ditandai
   "[DOI perlu verifikasi di doi.org]".
+- Indikator kinerja, pemetaan TKT, dan gerbang administratif adalah alat bantu
+  dan pengingat, BUKAN jaminan kelolosan. Keputusan pendanaan tergantung
+  kompetisi, kuota, rekam jejak, dan penilaian reviewer BRIN.
 - Firewall Integritas (Seksi K), anti-halusinasi (Seksi E), pengungkapan AI
   (Seksi O.2), dan Seksi P (Gaya Natural) tetap berlaku penuh.
+
+## Daftar modul (14 total)
+
+Core Layer, lalu Modul 0-12: pencarian literatur, intake, kontradiksi, rantai
+sitasi, kesenjangan, audit metodologi, rekomendasi judul, hibah dan publikasi,
+rekomendasi dataset (8), statistik multivariat (9), draf artikel IMRAD (10),
+proposal hibah BIMA (11), dan proposal BRIN RIIM Kompetisi (12).
 
 ## Login berbasis ACCESS_KEY (Streamlit Cloud Secrets Manager)
 
@@ -47,8 +55,7 @@ memakai sumber Modul 8 (rencana dataset) atau Modul 9 (rancangan analisis).
    ```toml
    ACCESS_KEY = "kunci-rahasia-anda"
    ```
-4. Halaman login akan meminta kunci tersebut. Dashboard hanya dikirim setelah
-   kunci benar.
+4. Halaman login akan meminta kunci tersebut.
 
 Untuk uji lokal: salin `.streamlit/secrets.toml.example` menjadi
 `.streamlit/secrets.toml`, isi kunci, lalu `streamlit run app.py`.
@@ -68,11 +75,11 @@ share.streamlit.io.
 ## Struktur berkas
 
 ```
-ALAS-v8.2/
+ALAS-v8.3/
 ├── app.py                          Pembungkus + login ACCESS_KEY
 ├── dashboard.html                  Antarmuka + Core Layer tersembunyi
 ├── requirements.txt
-├── ANALISIS_REVISI_CORE_LAYER.md   Analisis, pseudocode, 5 rekomendasi
+├── ANALISIS_REVISI_CORE_LAYER.md   Analisis, pseudocode, rekomendasi
 ├── .streamlit/config.toml
 ├── .streamlit/secrets.toml.example
 ├── .gitignore
