@@ -1,4 +1,4 @@
-# ALAS v8.3 — Asisten Riset Akademik
+# ALAS v8.4 — Asisten Riset Akademik
 
 (c) 2024-2026 **Alhumaira Store** · obrolanpintar1987@gmail.com
 
@@ -6,7 +6,7 @@ Penyusun *prompt* akademik untuk peneliti Indonesia, dari skripsi hingga hibah
 BIMA dan BRIN. Pilih bidang, jenjang, dan modul; salin ke asisten AI pilihan
 Anda. Core Layer bekerja di balik layar.
 
-## Apa yang baru di v8.3 — Modul 12: Proposal BRIN RIIM Kompetisi
+## Apa yang baru di v8.4 — Modul 12: Proposal BRIN RIIM Kompetisi
 
 Modul baru untuk menyusun proposal BRIN skema RIIM Kompetisi, melengkapi Modul
 11 (BIMA). Melanjutkan Modul 0-7 lalu memakai sumber Modul 8 (rencana dataset)
@@ -75,7 +75,7 @@ share.streamlit.io.
 ## Struktur berkas
 
 ```
-ALAS-v8.3/
+ALAS-v8.4/
 ├── app.py                          Pembungkus + login ACCESS_KEY
 ├── dashboard.html                  Antarmuka + Core Layer tersembunyi
 ├── requirements.txt

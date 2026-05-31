@@ -1,71 +1,54 @@
-# Analisis Revisi Core Layer — ALAS v8.2 → v8.3 (Modul 12: Proposal BRIN RIIM Kompetisi)
+# Analisis Revisi Core Layer — ALAS v8.3 → v8.4 (Penguatan Protokol Kanvas M11 & M12)
 
-Dokumen ini berisi analisis logis dan komprehensif untuk penambahan Modul 12
-(Proposal BRIN RIIM Kompetisi), disertai konsep algoritma dan pseudocode, lalu
-lima rekomendasi inti yang diwujudkan ke Core Layer. Prinsip: pertahankan yang
-sudah baik, perbaiki yang lemah, kembangkan yang berpotensi. Tanpa halusinasi,
-tanpa data palsu, integritas dijaga.
+Dokumen ini berisi analisis logis untuk penguatan protokol kanvas baru per
+segmen pada Modul 11 (Proposal BIMA) dan Modul 12 (Proposal BRIN RIIM), disertai
+pseudocode dan lima rekomendasi. Prinsip: pertahankan yang sudah baik, perbaiki
+yang lemah. Tanpa halusinasi, tanpa data palsu, integritas dijaga.
 
 ## Bagian 1 — Analisis Logis
 
-### 1.1 Yang dipertahankan (tidak direvisi)
-1. Modul 0-11 beserta struktur dan aturannya.
-2. Anti-halusinasi (E), Firewall (K), pengungkapan AI (O.2), PUBEI (C),
-   Gaya Natural (P), protokol kanvas baru per segmen.
-3. Login ACCESS_KEY dan Core Layer tersembunyi.
+### 1.1 Temuan awal (jujur)
+Protokol kanvas baru per segmen SUDAH ADA di M10, M11, dan M12 sejak v8.1-v8.3.
+Maka revisi ini BUKAN menambah fitur yang hilang, melainkan MEMPERKUAT dan
+MEMPERJELAS instruksi yang sudah ada agar lebih sulit dilanggar oleh AI tujuan.
 
-### 1.2 Penambahan (Modul 12 — RIIM Kompetisi)
-- Melanjutkan Modul 0-7, lalu sumber Modul 8 (rencana dataset) atau Modul 9
-  (rancangan analisis), untuk menyusun proposal BRIN skema RIIM Kompetisi.
-- Workflow bertahap: konfirmasi novelty di awal, lalu bab disusun lurus sesuai
-  pedoman BRIN; tersedia fallback "langsung saja" untuk lintas-AI.
-- Struktur khas RIIM: Kerangka Berpikir dan Nilai Strategis (bukan Pendahuluan
-  gaya BIMA), Metode, Indikator Kinerja Riset, TKT 3-6, Jadwal maksimal 3 tahun,
-  RAB, Daftar Pustaka APA.
+### 1.2 Kelemahan yang diperbaiki
+- C1: Instruksi lama hanya menyebut "tulis di kanvas baru" tanpa aturan tegas
+  satu-segmen-satu-kanvas, sehingga sebagian AI menggabung segmen.
+- C2: Belum ada penanganan bila ruang kanvas menipis di TENGAH segmen.
+- C3: Belum ada penegasan menunggu aba-aba "LANJUT" sebelum segmen berikutnya.
 
-### 1.3 Keputusan etis dan kejujuran (konsisten)
-- Anti-deteksi AI TIDAK diterapkan (langgar K dan O.2; klaim tak terjamin).
-- Semua angka (kata, dana, RAB, TKT, masa, pagu, peringkat jurnal) ditandai
-  "[verifikasi pedoman BRIN — pendanaan-risnov.brin.go.id]".
-- DOI hanya dari korpus; jika ragu "[DOI perlu verifikasi di doi.org]".
-- Indikator kinerja, gerbang administratif, dan pemetaan TKT dibingkai sebagai
-  alat bantu/pengingat, BUKAN jaminan kelolosan.
+### 1.3 Yang dipertahankan (tidak diubah)
+Seluruh isi substansi M11 dan M12 (struktur proposal, TKT, RAB, IKR, novelty,
+daftar pustaka APA), Core Layer, modul lain, login ACCESS_KEY, Seksi P.
 
-## Bagian 2 — Konsep Algoritma dan Pseudocode
+### 1.4 Keputusan etis (konsisten)
+Anti-deteksi AI TIDAK diterapkan. Tidak ada angka/DOI fabrikasi. Semua angka
+panduan tetap bertanda verifikasi.
 
-### 2.1 Workflow bertahap RIIM
-    ALGORITMA workflow_M12:
-        PRA: Modul 0-7 selesai; sumber := Modul 8 ATAU Modul 9
-        LANGKAH 0: tarik gap (M4) + korpus (M1), tampilkan untuk dikoreksi  [R1]
-        LANGKAH 1: usulkan novelty dari gap; tanya konfirmasi user
-                   fallback: jika user "langsung saja" -> pakai novelty usulan
-                   ditandai "[novelty usulan — mohon ditinjau]"
-        LANGKAH 2: susun bab berurutan (tanpa cek-balik novelty per bab)
-        LANGKAH 3: gerbang kualitas + gerbang administratif + kanvas per segmen
+## Bagian 2 — Pseudocode Penguatan
+    ALGORITMA kanvas_per_segmen_kuat:
+        ATURAN: satu kanvas = satu segmen (tidak boleh gabung)
+        UNTUK setiap segmen s:
+            BUAT kanvas baru berjudul "[KODE] - s"
+            tulis s sampai SELESAI
+            JIKA ruang menipis di tengah s:
+                tutup "[BERSAMBUNG — ketik LANJUT untuk sisa segmen ini]"
+                lanjut sisa s di kanvas baru saat diminta
+            akhiri: "=== AKHIR s === | LANJUT [segmen berikutnya]"
+            BERHENTI; tunggu aba-aba "LANJUT" sebelum segmen berikutnya
+        FALLBACK: jika platform tak punya kanvas -> blok berjudul, satu per respons
 
-### 2.2 Metode bercabang bidang + novelty
-    JIKA bidang DALAM {Saintek, Ilmu Komputer}:
-        desain model + algoritma flowchart (ASCII), novelty putus-putus berwarna
-        jumlah novelty: 1 jika 1 tahun, 2 jika multiyear (maks 3 tahun)
-    LAIN (Umum, Soshum): empat metode populer
+## Bagian 3 — Lima Rekomendasi (diterapkan)
+1. Aturan tegas SATU KANVAS = SATU SEGMEN. DITERAPKAN.
+2. Wajib membuat kanvas baru SEBELUM menulis segmen berikutnya. DITERAPKAN.
+3. Penanganan "BERSAMBUNG" bila ruang menipis di tengah segmen. DITERAPKAN.
+4. Penegasan berhenti dan menunggu aba-aba "LANJUT". DITERAPKAN.
+5. Daftar segmen eksplisit per modul + pemetaan istilah lintas-AI + fallback.
+   DITERAPKAN.
 
-### 2.3 Uji silang kelayakan
-    untuk tiap tahapan metode: pastikan ADA luaran dan ADA pos RAB terkait  [R9]
-    TKT: nyatakan awal -> target (rentang 3-6) dengan justifikasi realistis [R6]
-
-## Bagian 3 — Lima Rekomendasi Inti (diwujudkan)
-1. Lembar tarik-data M4 (gap) + M1 (korpus) di awal untuk dikoreksi.        [R1]
-2. Tabel Indikator Kinerja Riset (IKR) per tahun (KTI + HKI).               [R2]
-3. Pemandu Nilai Strategis berbasis pertanyaan + tema fokus BRIN.       [R3,R7]
-4. RAB pos standar yang sinkron dengan metode + uji silang.             [R4,R9]
-5. Gerbang Kesiapan Administratif (S3, rekam jejak, maks 2 proposal, CV).   [R5]
-
-Rekomendasi pendukung yang juga diterapkan: pemetaan TKT awal->target [R6],
-susunan tim periset [R8], ringkasan disusun terakhir [R10], validasi referensi
-mutakhir 5 tahun [R11], mitigasi risiko riset [R13].
-
-## Bagian 4 — Ringkasan Peningkatan v8.3 vs v8.2
-- Modul baru: Modul 12 (Proposal BRIN RIIM Kompetisi); 14 modul total.
-- Workflow bertahap dengan konfirmasi novelty + fallback lintas-AI.
-- Struktur khas RIIM, IKR per tahun, TKT 3-6, RAB sinkron metode, APA.
+## Bagian 4 — Ringkasan Peningkatan v8.4 vs v8.3
+- Protokol kanvas M11 dan M12 diperkuat dengan 5 aturan inti yang lebih tegas.
+- Penanganan ruang-menipis dan aba-aba LANJUT ditambahkan.
+- Substansi proposal tidak diubah; hanya instruksi kanvas yang diperjelas.
 - Integritas tetap utuh; tidak ada klaim berlebih atau data palsu.
