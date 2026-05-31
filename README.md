@@ -1,4 +1,4 @@
-# ALAS v8.5 — Asisten Riset Akademik
+# ALAS v8.6 — Asisten Riset Akademik
 
 (c) 2024-2026 **Alhumaira Store** · obrolanpintar1987@gmail.com
 
@@ -6,7 +6,7 @@ Penyusun *prompt* akademik untuk peneliti Indonesia, dari skripsi hingga hibah
 BIMA dan BRIN. Pilih bidang, jenjang, dan modul; salin ke asisten AI pilihan
 Anda. Core Layer bekerja di balik layar.
 
-## Apa yang baru di v8.5 — Modul 13: Proposal Skripsi
+## Apa yang baru di v8.6 — Modul 13: Proposal Skripsi
 
 Modul baru untuk menyusun draf proposal/laporan skripsi, melanjutkan Modul 0-7
 lalu memakai sumber Modul 8 (rencana dataset) atau Modul 9 (rancangan analisis).
@@ -28,7 +28,7 @@ lalu memakai sumber Modul 8 (rencana dataset) atau Modul 9 (rancangan analisis).
   disimpulkan di Bab 5); konsistensi istilah dari glosarium Modul 1; konsistensi
   sitasi Bab 2 dengan Daftar Pustaka; gerbang kelengkapan per tahap.
 - **Kanvas baru per bab:** tiap bab ditulis di kanvas/dokumen terpisah agar tidak
-  menabrak batas panjang (warisan protokol v8.4 yang diperkuat).
+  menabrak batas panjang (warisan protokol v8.6 yang diperkuat).
 
 ## Integritas
 
@@ -72,7 +72,7 @@ share.streamlit.io.
 
 ## Struktur berkas
 
-    ALAS-v8.5/
+    ALAS-v8.6/
     |- app.py
     |- dashboard.html
     |- requirements.txt
