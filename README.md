@@ -1,4 +1,4 @@
-# ALAS v8.1 — Asisten Riset Akademik
+# ALAS v8.2 — Asisten Riset Akademik
 
 (c) 2024-2026 **Alhumaira Store** · obrolanpintar1987@gmail.com
 
@@ -6,31 +6,36 @@ Penyusun *prompt* akademik untuk peneliti Indonesia, dari skripsi hingga hibah
 BIMA dan BRIN. Pilih bidang, jenjang, dan modul; salin ke asisten AI pilihan
 Anda. Core Layer bekerja di balik layar.
 
-## Apa yang baru di v8.1 (fokus Modul 10 — IMRAD)
+## Apa yang baru di v8.2 — Modul 11: Proposal Hibah BIMA
 
-Modul 10 (Draft Artikel IMRAD) ditulis ulang penuh:
+Modul baru untuk menyusun proposal hibah BIMA, melanjutkan Modul 0-7 lalu
+memakai sumber Modul 8 (rencana dataset) atau Modul 9 (rancangan analisis).
 
-- **Melanjutkan rangkaian.** Memakai hasil Modul 0-7, lalu sumber data dari
-  Modul 8 (Dataset) **atau** Modul 9 (Statistik) sesuai pilihan Anda.
-- **Dua skema target.** Scopus Q1 International (artikel penuh Bahasa Inggris)
-  atau SINTA 2 Nasional (badan Bahasa Indonesia; abstrak dan kata kunci Inggris).
-- **Struktur seragam.** Tiap bagian IMRAD ~750 kata, tiga sub-heading paragraf
-  penuh, ditutup enam pertanyaan literatur Bahasa Inggris.
-- **Methods bercabang menurut bidang.** Sains-Teknologi dan Ilmu Komputer:
-  desain pengembangan model dengan flowchart algoritma dan dua kebaruan
-  (*novelty*) bertanda lingkaran putus-putus. Umum dan Sosial-Humaniora:
-  empat metode populer (Kuantitatif, Kualitatif, Humaniora, Mixed Methods).
-- **Results bercabang.** Saintek/Ilkom: tabel dan grafik plus tabel perbandingan
-  dengan penelitian sebelumnya. Soshum: data empiris disandingkan dengan
-  penelitian terdahulu untuk menunjukkan pergeseran konseptual.
-- **Penutup lengkap.** Conclusion 250 kata dengan angka kuantitatif, Abstract
-  300 kata yang disusun terpisah, lima kata kunci satu suku kata, rekomendasi
-  judul standar Scopus Q1, dan daftar pustaka APA 7.
+- **Empat sub-template:** PDP, PFR (Penelitian Dasar); Terapan Luaran Model,
+  Terapan Luaran Prototipe (Penelitian Terapan).
+- **Struktur mengikuti template BIMA:** Judul (maks 20 kata), Ringkasan
+  (300 kata), 5 kata kunci satu kata, Pendahuluan (1000 kata: latar belakang
+  dan 3 rumusan masalah, pendekatan, state of the art dan kebaruan, roadmap
+  5 tahun gaya fishbone), Metode (1000 kata dengan diagram alir algoritma),
+  Hasil yang Diharapkan, TKT, Jadwal (13 kegiatan), Daftar Pustaka APA.
+- **Metode bercabang per bidang:** Saintek/Ilmu Komputer memakai pengembangan
+  model dengan flowchart algoritma; Umum/Sosial-Humaniora memakai empat metode
+  populer. Novelty ditandai garis putus-putus berwarna: satu novelty untuk
+  penelitian 1 tahun, dua novelty untuk multiyear.
+- **Khusus skema Terapan:** Strategi Pencapaian TKT (awal ke target), Rencana
+  Kemitraan (Surat Kesediaan Mitra dan MoU, wajib), dan luaran model/prototipe
+  beserta HKI.
+- **Bobot penilaian per skema:** Modul 11 menyelaraskan penekanan penulisan
+  dengan kriteria reviewer BIMA. Ini penyelaras kriteria, BUKAN jaminan lolos;
+  kelolosan tergantung kompetisi, kuota, rekam jejak, dan penilaian reviewer.
 
 ## Integritas
 
-- DOI hanya dicantumkan dari korpus; jika tidak yakin ditandai
-  "[DOI perlu verifikasi di doi.org]". AI tidak menjamin keaktifan DOI.
+- Semua angka panduan (jumlah kata, dana, RAB, TKT, masa penelitian) ditandai
+  "[verifikasi panduan BIMA terbaru — bima.kemdiktisaintek.go.id]" karena dapat
+  berubah tiap tahun.
+- DOI hanya dicantumkan dari korpus; jika ragu ditandai
+  "[DOI perlu verifikasi di doi.org]".
 - Firewall Integritas (Seksi K), anti-halusinasi (Seksi E), pengungkapan AI
   (Seksi O.2), dan Seksi P (Gaya Natural) tetap berlaku penuh.
 
@@ -43,7 +48,7 @@ Modul 10 (Draft Artikel IMRAD) ditulis ulang penuh:
    ACCESS_KEY = "kunci-rahasia-anda"
    ```
 4. Halaman login akan meminta kunci tersebut. Dashboard hanya dikirim setelah
-   kunci benar. Kunci tidak pernah disimpan di kode atau repositori.
+   kunci benar.
 
 Untuk uji lokal: salin `.streamlit/secrets.toml.example` menjadi
 `.streamlit/secrets.toml`, isi kunci, lalu `streamlit run app.py`.
@@ -63,7 +68,7 @@ share.streamlit.io.
 ## Struktur berkas
 
 ```
-ALAS-v8.1/
+ALAS-v8.2/
 ├── app.py                          Pembungkus + login ACCESS_KEY
 ├── dashboard.html                  Antarmuka + Core Layer tersembunyi
 ├── requirements.txt
