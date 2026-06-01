@@ -1,4 +1,4 @@
-# ARAS v9.1 — Asisten Riset Akademik System
+# ARAS v9.2 — Asisten Riset Akademik System
 
 (c) 2024-2026 **Alhumaira Store** · obrolanpintar1987@gmail.com
 
@@ -83,3 +83,10 @@ ARAS-v9.1/
 |- .gitignore
 |- .gitattributes
 ```
+
+## Catatan v9.2
+- Penguat 77 kata (tak berlabel) memperkuat M0–M7.
+- M7/C kini: 5 penelitian terdahulu → GAP → 1 penelitian saat ini yang menjawab
+  GAP (kontribusi diusulkan, bukan data dikarang).
+- M7/D: novelty bertipe per tingkat — S1 Application, S2 Improvement,
+  S3 Invention; BIMA & BRIN tetap (2 novelty multiyear).

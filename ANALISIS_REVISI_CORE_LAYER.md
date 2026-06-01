@@ -1,4 +1,4 @@
-# ANALISIS REVISI CORE LAYER — ARAS (v8.11 → v9.1)
+# ANALISIS REVISI CORE LAYER — ARAS (v8.11 → v9.2)
 
 (c) 2024-2026 Alhumaira Store · obrolanpintar1987@gmail.com
 Catatan internal; tidak dirender ke pengguna.
@@ -45,3 +45,17 @@ Rail menampilkan M0–M7 saja; cabang + terminal tersimpan sebagai routing.
 ## 6. Tidak diimplementasikan
 Fitur "lolos AI detector" tidak dibuat (bertentangan dengan integritas akademik
 dan pengungkapan AI). Diganti peningkatan gaya natural yang etis.
+
+## 7. Tambahan v9.2
+- Blok penguat 77 kata (tanpa label) disisipkan sebelum CORE_LAYER pada semua
+  prompt M0-M7 (juga cabang & terminal) untuk memperkuat integritas & gaya, tanpa
+  menampakkan bahwa itu lapisan inti.
+- M7 bagian C: sintesis 5 penelitian terdahulu (APA, DOI [verifikasi]) -> GAP ->
+  posisi 1 "penelitian saat ini" yang menjawab GAP, disajikan sebagai kontribusi
+  DIUSULKAN (bukan hasil/angka dikarang).
+- M7 bagian D: novelty menjawab GAP, dengan TIPE per tingkat:
+  S1 Application, S2 Improvement, S3 Invention; BIMA/BRIN tetap (kontribusi
+  orisinal peta jalan, jumlah 2 multiyear). Default tingkat untuk non-gelar:
+  Publikasi Internasional -> Improvement/Invention; Sinta -> Improvement;
+  Laporan -> Application. Jumlah & tipe novelty adalah dua atribut terpisah.
+- Tipe novelty masuk ke MCB ("Tipe novelty") agar konsisten di modul terminal.
