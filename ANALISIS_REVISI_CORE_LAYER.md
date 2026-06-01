@@ -1,48 +1,49 @@
-# Analisis Revisi — ARAS v9.2 → v9.3 (Prasyarat M0-M7 Mengikuti Gaya v8.11)
+# Analisis Revisi — ARAS v9.3 → v9.4 (Kembalikan Sidebar Daftar Modul Gaya v8.11)
 
-Revisi mengembalikan perilaku prasyarat ke gaya v8.11: PENGINGAT berbasis teks,
-tanpa penguncian UI. Isi prompt inti tidak diubah. Tanpa halusinasi, tanpa data
-palsu.
+Revisi mengembalikan cara memilih modul ke gaya v8.11 (sidebar daftar Modul
+0-16, pilih langsung), tetap server-side, sambil mempertahankan pemetaan tujuan
+dan kunci sumber per bidang. Isi prompt inti tidak diubah.
 
 ## Bagian 1 — Analisis Logis
 
-### 1.1 Latar
-Pada v9.2, prasyarat M0-M7 dikunci di UI (checkbox bertahap + cascade reset).
-Pengguna meminta mengikuti gaya v8.11.
+### 1.1 Masalah pada v9.3
+Alur berbasis tujuan (pilih Bidang -> Tujuan -> modul otomatis) terasa
+membingungkan karena menghilangkan kebiasaan v8.11: memilih modul langsung dari
+daftar di sidebar.
 
-### 1.2 Fakta v8.11
-Di v8.11 TIDAK ada penguncian UI untuk M0-M7. Pengecekan "Modul 0-7 selesai?"
-hanya berupa blok PEMERIKSAAN PRA-KONDISI di dalam teks prompt, yang dibaca oleh
-AI tujuan. Pengguna bebas membuka/merakit modul; AI yang menjaga urutan.
+### 1.2 Solusi (v9.4)
+- KEMBALIKAN sidebar daftar Modul 0-16 sebagai pemilih utama (gaya v8.11).
+- Pemetaan Tujuan -> modul DIPERTAHANKAN sebagai PINTASAN opsional di Beranda;
+  bukan satu-satunya jalan.
+- Kunci sumber per bidang (Saintek/Ilkom -> M8; Umum/Soshum -> M9) TETAP berlaku.
+- Untuk M10 yang dipilih dari sidebar: tampilkan pemilih Jenis Publikasi
+  (Internasional/SINTA) lalu Target, dengan komposisi bertingkat.
 
-### 1.3 Perubahan (v9.3)
-- HAPUS checkbox penguncian bertahap dan cascade reset dari UI.
-- GANTI dengan catatan pengingat (prasyarat_note) bergaya v8.11.
-- Tombol "Rakit & Salin Prompt" tidak lagi terkunci; pengguna bebas merakit.
-- Blok PEMERIKSAAN PRA-KONDISI tetap ada di dalam prompt (sudah sejak awal) dan
-  menjadi penjaga urutan, persis seperti v8.11.
-
-### 1.4 Konsekuensi (kejujuran)
-- Dashboard tidak lagi mencegah perakitan sebelum M0-M7; penjagaan urutan
-  bergantung pada AI tujuan yang membaca pra-kondisi. Ini perilaku v8.11 yang
-  diminta pengguna, disampaikan apa adanya.
-- Tidak ada perubahan pada isi prompt inti, pemetaan tujuan, kunci sumber per
-  bidang, komposisi target M10, maupun Core Layer server-side.
+### 1.3 Yang dipertahankan
+- Komposisi target M10 bertingkat (Q1 90/10 ... SINTA 4 dominan SINTA).
+- Core Layer server-side; prasyarat M0-M7 gaya v8.11 (pengingat, bukan kunci UI).
+- Anti-deteksi AI tidak diterapkan; anti-fabrikasi. Isi prompt inti tidak berubah.
 
 ## Bagian 2 — Pseudocode
-    ALGORITMA prasyarat_gaya_v811():
-        tampilkan catatan: "selesaikan M0-M7 berurutan, lalu M8/M9 per bidang"
-        # tidak ada penguncian UI
-    # tombol rakit selalu aktif; AI tujuan membaca PEMERIKSAAN PRA-KONDISI
-    # dan berhenti bila prasyarat kosong.
+    ALGORITMA pilih_modul_v411():
+        modul := sidebar_radio(Modul 0..16)           # pemilih utama (v8.11)
+        JIKA pengguna pakai Pintasan Tujuan di Beranda:
+            modul := TUJUAN_KE_MODUL[tujuan]           # lompatan opsional
+        JIKA modul = M10:
+            jenis := pilih(Internasional / SINTA)
+            target := pilih(Q1-Q4 / SINTA 1-4) ; tampilkan komposisi
+        rakit_sisi_server(modul, konteks)             # hanya hasil akhir ke klien
 
 ## Bagian 3 — Verifikasi
-- Tidak ada checkbox di UI (0). (terverifikasi)
-- Tombol rakit aktif tanpa syarat; perakitan bebas menghasilkan prompt akhir
-  berisi Core Layer DAN blok PEMERIKSAAN PRA-KONDISI. (terverifikasi)
+- Sidebar memuat 17 modul (Modul 0 sampai Modul 16); pilih langsung. (terverifikasi)
+- M13 menampilkan Tahap + Jenis Penelitian; M0 tanpa galat. (terverifikasi)
+- M10: pilih Jenis Publikasi -> Target diperbarui (SINTA 1-4 / Scopus Q1-Q4);
+  perakitan menghasilkan komposisi yang benar (mis. SINTA 4 -> dominan SINTA).
+  (terverifikasi)
+- Perakitan menghasilkan prompt akhir berisi Core Layer. (terverifikasi)
 - 8/8 uji unit assembler tetap lulus.
 
-## Bagian 4 — Yang dipertahankan
-Pemetaan tujuan->modul, kunci sumber per bidang, komposisi target M10, Core
-Layer server-side, anti-deteksi AI tidak diterapkan, anti-fabrikasi. Isi prompt
-inti tidak berubah.
+## Bagian 4 — Catatan jujur
+Pintasan Tujuan dan sidebar bisa saling melengkapi; bila keduanya dipakai,
+pilihan terakhir (sidebar atau pintasan) yang menentukan modul aktif. Tidak ada
+perubahan pada isi prompt inti.

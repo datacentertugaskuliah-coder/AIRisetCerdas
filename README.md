@@ -1,4 +1,4 @@
-# ARAS v9.3 — Asisten Riset Akademik System
+# ARAS v9.4 — Asisten Riset Akademik System
 
 (c) 2024-2026 **Alhumaira Store** · obrolanpintar1987@gmail.com
 
@@ -7,11 +7,12 @@ mengubah ALAS menjadi **ARAS** dengan alur berbasis tujuan: pengguna memilih
 bidang dan tujuan, lalu sistem menentukan modul dan aturannya secara otomatis.
 Lapisan Inti (Core Layer) tetap di sisi server.
 
-## Apa yang baru di v9.3
+## Apa yang baru di v9.4
 
 - **Ganti nama:** ALAS menjadi **ARAS — Asisten Riset Akademik System**.
-- **Beranda terpandu (R1).** Pengguna memilih Bidang Ilmu lalu Tujuan;
-  Jenjang/Skema terisi otomatis dari Tujuan (tidak ada pilihan ganda yang
+- **Sidebar daftar modul (gaya v8.11).** Pilih Modul 0-16 langsung dari
+  sidebar kiri. Pintasan Tujuan di Beranda tetap tersedia (opsional) untuk
+  melompat ke modul yang sesuai. Kunci sumber per bidang tetap berlaku.
   membingungkan).
 - **Pemetaan Tujuan ke modul:**
   - Skripsi -> Modul 13
@@ -53,7 +54,7 @@ access tidak dikarang; yang ragu ditandai untuk verifikasi.
 ## Struktur paket
 
 ```
-ARAS-v9.3/
+ARAS-v9.4/
 ├── app.py                       # entry Streamlit (alur terpandu)
 ├── alas_core/
 │   ├── __init__.py

@@ -27,8 +27,39 @@ def header_html(version: str) -> str:
     """
 
 
-def beranda_controls(st, ctx) -> None:
-    """Beranda: pilih Bidang + Tujuan; Jenjang/Skema terisi otomatis (Opsi 2)."""
+def sidebar_modules(st, current_id: str) -> str:
+    """Sidebar daftar Modul 0-16 (gaya v8.11): pilih modul langsung.
+
+    Kembalikan id modul terpilih. Dikelompokkan sesuai grup di config.MODULES.
+    """
+    st.sidebar.markdown("### Daftar Modul")
+    grup: dict[str, list] = {}
+    for mid, judul, sub, g in config.MODULES:
+        grup.setdefault(g, []).append((mid, judul, sub))
+
+    label_to_id: dict[str, str] = {}
+    semua_label: list[str] = []
+    for g, items in grup.items():
+        for mid, judul, sub in items:
+            label = f"{judul} — {sub}"
+            label_to_id[label] = mid
+            semua_label.append(label)
+
+    # Tentukan indeks awal sesuai modul aktif.
+    id_to_label = {v: k for k, v in label_to_id.items()}
+    idx = semua_label.index(id_to_label.get(current_id, semua_label[0])) \
+        if current_id in id_to_label else 0
+
+    pilih = st.sidebar.radio("Pilih modul", semua_label, index=idx,
+                             label_visibility="collapsed")
+    return label_to_id[pilih]
+
+
+def beranda_pintasan(st, ctx) -> str | None:
+    """Beranda: Bidang + (opsional) pintasan Tujuan -> modul. Gaya v8.11 plus.
+
+    Kembalikan module_id jika pengguna memakai pintasan Tujuan, selain itu None.
+    """
     st.markdown("#### 🏠 Beranda — Dashboard & Panduan")
     c1, c2 = st.columns(2)
     with c1:
@@ -36,29 +67,48 @@ def beranda_controls(st, ctx) -> None:
             "Bidang Ilmu", config.FIELDS,
             index=config.FIELDS.index(ctx.bidang) if ctx.bidang in config.FIELDS else 0)
     with c2:
-        ctx.tujuan = st.selectbox(
-            "Tujuan", config.TUJUAN,
-            index=config.TUJUAN.index(ctx.tujuan) if ctx.tujuan in config.TUJUAN else 0)
+        opsi = ["— pilih modul dari sidebar —"] + config.TUJUAN
+        pilih = st.selectbox("Pintasan Tujuan (opsional)", opsi, index=0)
 
-    # Jenjang/Skema otomatis (read-only).
-    st.text_input("Jenjang / Skema (otomatis dari Tujuan)",
-                  value=ctx.jenjang, disabled=True)
-
-    # Sumber data dikunci per bidang.
     st.caption(
-        f"Sumber data terkunci per bidang: **{config.sumber_data_label(ctx.bidang)}** "
-        f"({'Saintek/Ilmu Komputer' if ctx.sumber_modul=='m8' else 'Umum/Sosial-Humaniora'}). "
-        f"Modul tujuan: **{config.TUJUAN_KE_MODUL.get(ctx.tujuan,'-').upper()}**."
+        f"Sumber data terkunci per bidang: **{config.sumber_data_label(ctx.bidang)}**. "
+        "Pilih modul langsung dari sidebar kiri, atau pakai Pintasan Tujuan untuk "
+        "melompat ke modul yang sesuai."
     )
+    if pilih != "— pilih modul dari sidebar —":
+        ctx.tujuan = pilih
+        return config.TUJUAN_KE_MODUL.get(pilih)
+    return None
 
 
-def target_control(st, ctx) -> None:
-    """Untuk M10 (Publikasi): pilih target Scopus/SINTA + tampilkan komposisi."""
+def target_control(st, ctx, module_id: str = "") -> None:
+    """Untuk M10 (Publikasi): pilih jenis publikasi + target + komposisi.
+
+    Bila M10 dipilih dari sidebar (tujuan belum tentu Publikasi), tampilkan
+    pemilih jenis publikasi lebih dulu.
+    """
+    if module_id != "m10":
+        ctx.target = ""
+        return
+
+    if ctx.tujuan not in ("Publikasi Internasional", "Publikasi SINTA"):
+        jenis_pub = st.selectbox("Jenis Publikasi",
+                                 ["Publikasi Internasional", "Publikasi SINTA"],
+                                 key="aras_jenis_pub")
+        ctx.tujuan = jenis_pub
+    else:
+        # Izinkan pengguna mengganti jenis publikasi walau sudah terset.
+        opsi = ["Publikasi Internasional", "Publikasi SINTA"]
+        jenis_pub = st.selectbox("Jenis Publikasi", opsi,
+                                 index=opsi.index(ctx.tujuan),
+                                 key="aras_jenis_pub")
+        ctx.tujuan = jenis_pub
+
     targets = config.target_untuk_tujuan(ctx.tujuan)
     if not targets:
         ctx.target = ""
         return
-    ctx.target = st.selectbox("Target Publikasi", targets)
+    ctx.target = st.selectbox("Target Publikasi", targets, key="aras_target_pub")
     komp = config.komposisi(ctx.target)
     if komp:
         intl, sinta, catatan = komp

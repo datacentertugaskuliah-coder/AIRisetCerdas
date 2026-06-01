@@ -42,30 +42,40 @@ def main() -> None:
 
     ctx = _load_ctx()
 
-    # Beranda: bidang + tujuan (jenjang otomatis).
-    render.beranda_controls(st, ctx)
-    module_id = ctx.module_id
+    # Beranda: bidang + pintasan tujuan opsional.
+    pintasan_id = render.beranda_pintasan(st, ctx)
+
+    # Sidebar daftar modul (gaya v8.11) = pemilih utama.
+    # Jika pengguna memakai pintasan Tujuan, jadikan modul itu yang aktif.
+    aktif = pintasan_id or st.session_state.get("aras_module_id", "m0")
+    module_id = render.sidebar_modules(st, aktif)
+    st.session_state["aras_module_id"] = module_id
+    # Selaraskan tujuan dengan modul yang dipilih (untuk konteks jenjang).
+    # Untuk M10, JANGAN paksa tujuan (biar pengguna pilih jenis publikasi sendiri).
+    if module_id != "m10":
+        for tj, mid in config.TUJUAN_KE_MODUL.items():
+            if mid == module_id:
+                ctx.tujuan = tj
+                break
 
     st.divider()
     # Gaya v8.11: prasyarat M0-M7 sebagai PENGINGAT (bukan penguncian UI).
-    # Penjagaan urutan dilakukan oleh blok PEMERIKSAAN PRA-KONDISI di dalam prompt
-    # yang dibaca AI tujuan.
     render.prasyarat_note(st)
 
     st.divider()
     meta = next((m for m in config.MODULES if m[0] == module_id), None)
     if meta:
-        st.subheader(f"Modul Tujuan: {meta[1]} — {meta[2]}")
+        st.subheader(f"{meta[1]} — {meta[2]}")
 
     # Target khusus M10 (Publikasi Internasional/SINTA).
-    render.target_control(st, ctx)
+    render.target_control(st, ctx, module_id)
     # Topik + spesifik modul.
     render.topic_and_specifics(st, ctx, module_id)
 
     _save_ctx(ctx)
 
     st.divider()
-    render.ringkasan_konteks(st, ctx, module_id)  # R3
+    render.ringkasan_konteks(st, ctx, module_id)
 
     if st.button("Rakit & Salin Prompt (+ Core Layer)", type="primary"):
         final_prompt = assembler.assemble(module_id, ctx)
