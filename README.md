@@ -1,4 +1,4 @@
-# ALAS v8.8 — Asisten Riset Akademik
+# ALAS v8.9.1 — Asisten Riset Akademik
 
 (c) 2024-2026 **Alhumaira Store** · obrolanpintar1987@gmail.com
 
@@ -6,28 +6,26 @@ Penyusun *prompt* akademik untuk peneliti Indonesia, dari skripsi dan tesis
 hingga hibah BIMA dan BRIN. Pilih bidang, jenjang, dan modul; salin ke asisten
 AI pilihan Anda. Core Layer bekerja di balik layar.
 
-## Apa yang baru di v8.8 — Modul 14: Proposal Tesis (S2)
+## Apa yang baru di v8.9.1 — Modul 15: Proposal Disertasi (S3)
 
-Modul baru untuk menyusun draf proposal/laporan tesis S2, melanjutkan Modul 0-7
-lalu memakai sumber Modul 8 (rencana dataset) atau Modul 9 (rancangan analisis).
-Modul 14 sengaja DIBEDAKAN dari Modul 13 (skripsi S1) melalui pembeda jenjang:
+Modul baru untuk menyusun draf proposal/laporan disertasi S3, melanjutkan Modul
+0-7 lalu memakai sumber Modul 8 (rencana dataset) atau Modul 9 (rancangan
+analisis). Modul 15 sengaja DIBEDAKAN dari Modul 14 (tesis S2) dan Modul 13
+(skripsi S1) melalui pembeda jenjang doktoral:
 
-- **Kerangka konseptual dan hipotesis/proposisi:** Bab 2 tidak berhenti pada
-  uraian teori, tetapi mensintesisnya menjadi kerangka konseptual dan hipotesis
-  (kuantitatif) atau proposisi (kualitatif).
-- **Posisi kebaruan:** Bab 1-2 menegaskan kebaruan terhadap penelitian terdahulu.
-- **Metodologi tingkat S2:** justifikasi pemilihan metode, definisi operasional,
-  dan rigor yang lebih ketat; tetap bercabang bidang dan jenis penelitian.
-- **Kontribusi teoretis ditonjolkan:** manfaat memisahkan kontribusi teoretis
-  (utama) dan praktis.
-- **Rujukan lebih internasional:** Bab 2 memakai 80% jurnal internasional
-  bereputasi (Scopus Q2/Q3/Q4/IEEE) dan 20% SINTA 1-2, utamakan open access,
-  mutakhir 5-10 tahun, dominan sumber primer.
+- Pernyataan orisinalitas formal di Bab 1: klaim kebaruan yang eksplisit.
+- Posisi disertasi dalam perdebatan/diskursus keilmuan, bukan sekadar gap teknis.
+- Proposisi atau model teoretis baru di Bab 2, melampaui kerangka konseptual S2.
+- Justifikasi paradigma penelitian di Bab 3 (mendalam untuk Sosial-Humaniora,
+  ringkas untuk Saintek/Ilmu Komputer).
+- Roadmap kontribusi: catatan ringkas rencana luaran publikasi dari disertasi.
+- Gerbang kelayakan disertasi: cek kebaruan, orisinalitas, dan rigor doktoral.
 
-Dua tahap (seperti Modul 13): Tahap 1 Seminar Proposal (Bab 1-3), Tahap 2
-Seminar Hasil (Bab 1-5). Bab 4-5 berupa kerangka bertanda anti-fabrikasi.
-Tiap bab ditulis di kanvas/dokumen terpisah. Selektor bidang ilmu tersedia
-langsung di halaman Modul 14 dengan pembaruan tampilan secara langsung.
+Dua tahap (seperti Modul 13 dan 14): Tahap 1 Seminar Proposal (Bab 1-3), Tahap 2
+Seminar Hasil (Bab 1-5). Sumber Bab 2: 90% jurnal internasional bereputasi (Scopus Q1/Q2/Q3/Q4/IEEE) dan 10% SINTA 1-2, utamakan open access. Bab 4-5 berupa
+kerangka bertanda anti-fabrikasi. Tiap bab ditulis di kanvas/dokumen terpisah.
+Selektor bidang ilmu tersedia langsung di halaman Modul 15.
+
 
 ## Integritas
 
@@ -39,7 +37,7 @@ langsung di halaman Modul 14 dengan pembaruan tampilan secara langsung.
 - Firewall Integritas (Seksi K), anti-halusinasi (Seksi E), pengungkapan AI
   (Seksi O.2), dan Seksi P (Gaya Natural) tetap berlaku penuh.
 
-## Daftar modul (16 total)
+## Daftar modul (17 total)
 
 Core Layer, lalu Modul 0-14: pencarian literatur, intake, kontradiksi, rantai
 sitasi, kesenjangan, audit metodologi, rekomendasi judul, hibah dan publikasi,
@@ -72,7 +70,7 @@ share.streamlit.io.
 
 ## Struktur berkas
 
-    ALAS-v8.8/
+    ALAS-v8.9.1/
     |- app.py
     |- dashboard.html
     |- requirements.txt
