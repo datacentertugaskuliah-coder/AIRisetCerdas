@@ -1,159 +1,82 @@
-"""
-ALAS v8.11 — Asisten Riset Akademik
-(c) 2024-2026 Alhumaira Store | obrolanpintar1987@gmail.com
+"""ARAS — Asisten Riset Akademik System (entry Streamlit, server-side core).
 
-Pembungkus Streamlit untuk dashboard ALAS v8.11 dengan gerbang login berbasis
-ACCESS_KEY yang disimpan di Streamlit Cloud Secrets Manager.
+(c) 2024-2026 Alhumaira Store. Hak cipta dilindungi.
 
-Catatan keamanan:
-- Kunci akses TIDAK pernah disimpan di kode atau repositori; hanya dibaca dari
-  st.secrets (Secrets Manager).
-- Dashboard (dashboard.html) baru dikirim ke browser SETELAH kunci benar.
-- Perbandingan kunci memakai hmac.compare_digest (tahan serangan timing).
-- Ada pembatasan jumlah percobaan per sesi untuk mengurangi tebakan beruntun.
+Alur terpandu berbasis tujuan: pengguna memilih Bidang + Tujuan di Beranda;
+Jenjang/Skema dan modul terisi otomatis. Modul tujuan terkunci hingga modul
+fondasi M0-M7 ditandai selesai. Lapisan Inti dirakit di server; hanya hasil
+akhir yang dikirim ke klien.
 """
-import hmac
-import time
-from pathlib import Path
+from __future__ import annotations
 
 import streamlit as st
-import streamlit.components.v1 as components
 
-st.set_page_config(
-    page_title="ALAS v8.11 - Asisten Riset Akademik",
-    page_icon="\U0001F4DA",
-    layout="wide",
-    initial_sidebar_state="collapsed",
-    menu_items={
-        "About": (
-            "ALAS v8.11 - Asisten Riset Akademik\n"
-            "16 Seksi (A-P) - 12 Modul - Core Layer Tersembunyi\n"
-            "(c) 2024-2026 Alhumaira Store\n"
-            "obrolanpintar1987@gmail.com"
-        )
-    },
-)
+from alas_core import __version__, assembler, auth, config
+from ui import render
 
-MAX_ATTEMPTS = 5          # batas percobaan per sesi
-LOCK_SECONDS = 60         # jeda kunci setelah batas tercapai
+st.set_page_config(page_title="ARAS — Asisten Riset Akademik System",
+                   page_icon="AR", layout="wide")
 
 
-def _get_secret_key() -> str:
-    """Ambil ACCESS_KEY dari Secrets Manager. Kosong jika belum diatur."""
-    try:
-        return str(st.secrets["ACCESS_KEY"])
-    except Exception:
-        return ""
+def _load_ctx() -> assembler.Context:
+    ctx = assembler.Context()
+    for k, v in st.session_state.get("aras_ctx", {}).items():
+        setattr(ctx, k, v)
+    return ctx
 
 
-def _login_styles() -> None:
-    st.markdown(
-        """<style>
-        #MainMenu, header, [data-testid="stToolbar"], [data-testid="stDecoration"],
-        .stDeployButton { display:none !important; visibility:hidden !important; }
-        .block-container { max-width: 460px; padding-top: 8vh; }
-        .alas-card {
-            background:#fffdf8; border:1px solid #ddd6c7; border-radius:16px;
-            padding:30px 28px; box-shadow:0 8px 30px rgba(21,19,15,.08);
-        }
-        .alas-logo {
-            width:54px; height:54px; border-radius:12px; background:#13314f;
-            color:#f3ecd6; display:flex; align-items:center; justify-content:center;
-            font-weight:700; font-size:22px; font-family:Georgia,serif;
-            letter-spacing:1px; margin-bottom:16px;
-        }
-        .alas-title { font-family:Georgia,serif; font-size:24px; font-weight:700;
-            color:#15130f; margin:0 0 4px; }
-        .alas-sub { font-size:13px; color:#7c766a; margin-bottom:6px;
-            font-family:ui-monospace,monospace; }
-        </style>""",
-        unsafe_allow_html=True,
-    )
+def _save_ctx(ctx: assembler.Context) -> None:
+    st.session_state["aras_ctx"] = {
+        "bidang": ctx.bidang, "tujuan": ctx.tujuan, "target": ctx.target,
+        "topic": ctx.topic, "stage": ctx.stage, "jenis": ctx.jenis,
+        "period": ctx.period, "theme": ctx.theme,
+    }
 
 
-def _render_login() -> None:
-    _login_styles()
-    secret_key = _get_secret_key()
+def main() -> None:
+    if not auth.gate(st):
+        return
 
-    st.markdown(
-        '<div class="alas-card">'
-        '<div class="alas-logo">AL</div>'
-        '<div class="alas-title">ALAS v8.11</div>'
-        '<div class="alas-sub">Asisten Riset Akademik &middot; Akses Terbatas</div>',
-        unsafe_allow_html=True,
-    )
+    st.markdown(render.header_html(__version__), unsafe_allow_html=True)
+    st.write("")
 
-    if not secret_key:
-        st.error(
-            "ACCESS_KEY belum diatur di Secrets Manager. "
-            "Tambahkan terlebih dahulu melalui menu Settings -> Secrets "
-            "pada aplikasi Streamlit Cloud Anda."
-        )
-        st.markdown("</div>", unsafe_allow_html=True)
-        st.stop()
+    ctx = _load_ctx()
 
-    # Status kunci percobaan
-    locked_until = st.session_state.get("locked_until", 0)
-    now = time.time()
-    if now < locked_until:
-        sisa = int(locked_until - now)
-        st.warning(f"Terlalu banyak percobaan. Coba lagi dalam {sisa} detik.")
-        st.markdown("</div>", unsafe_allow_html=True)
-        st.stop()
+    # Beranda: bidang + tujuan (jenjang otomatis).
+    render.beranda_controls(st, ctx)
+    module_id = ctx.module_id
 
-    with st.form("login_form", clear_on_submit=False):
-        key_input = st.text_input("Kunci Akses", type="password",
-                                  placeholder="Masukkan kunci akses")
-        submitted = st.form_submit_button("Masuk", use_container_width=True)
+    st.divider()
+    # R2: prasyarat fondasi M0-M7.
+    siap = render.prasyarat_status(st, st.session_state)
 
-    if submitted:
-        attempts = st.session_state.get("attempts", 0)
-        # Perbandingan tahan-timing
-        if hmac.compare_digest(key_input or "", secret_key):
-            st.session_state["authenticated"] = True
-            st.session_state["attempts"] = 0
-            st.rerun()
-        else:
-            attempts += 1
-            st.session_state["attempts"] = attempts
-            if attempts >= MAX_ATTEMPTS:
-                st.session_state["locked_until"] = time.time() + LOCK_SECONDS
-                st.error(f"Kunci salah {attempts} kali. Dikunci {LOCK_SECONDS} detik.")
-            else:
-                sisa = MAX_ATTEMPTS - attempts
-                st.error(f"Kunci akses salah. Sisa percobaan: {sisa}.")
+    st.divider()
+    meta = next((m for m in config.MODULES if m[0] == module_id), None)
+    if meta:
+        st.subheader(f"Modul Tujuan: {meta[1]} — {meta[2]}")
 
-    st.markdown("</div>", unsafe_allow_html=True)
-    st.stop()
+    # Target khusus M10 (Publikasi Internasional/SINTA).
+    render.target_control(st, ctx)
+    # Topik + spesifik modul.
+    render.topic_and_specifics(st, ctx, module_id)
+
+    _save_ctx(ctx)
+
+    st.divider()
+    render.ringkasan_konteks(st, ctx, module_id)  # R3
+
+    if not siap:
+        st.button("Rakit & Salin Prompt (+ Core Layer)", disabled=True)
+        st.caption("Tombol terkunci sampai Modul 0-7 ditandai selesai.")
+        return
+
+    if st.button("Rakit & Salin Prompt (+ Core Layer)", type="primary"):
+        final_prompt = assembler.assemble(module_id, ctx)
+        st.caption("Prompt akhir (Core Layer dirakit di server dan ikut):")
+        st.code(final_prompt, language="markdown")
+        st.download_button("Unduh prompt (.txt)", final_prompt,
+                           file_name=f"aras_{module_id}.txt")
 
 
-def _render_app() -> None:
-    st.markdown(
-        """<style>
-        #MainMenu, header, footer,
-        [data-testid="stHeader"], [data-testid="stToolbar"],
-        [data-testid="stDecoration"], .stDeployButton {
-          display:none !important; visibility:hidden !important;
-        }
-        .main .block-container { padding:0 !important; margin:0 !important; max-width:100% !important; }
-        .main { padding:0 !important; }
-        html, body { margin:0 !important; padding:0 !important; overflow-x:hidden; }
-        iframe { width:100% !important; border:none !important; display:block !important; }
-        </style>""",
-        unsafe_allow_html=True,
-    )
-
-    html_path = Path(__file__).parent / "dashboard.html"
-    if not html_path.exists():
-        st.error("Berkas dashboard.html tidak ditemukan.")
-        st.stop()
-
-    # Dashboard hanya dikirim ke browser setelah login berhasil.
-    components.html(html_path.read_text(encoding="utf-8"), height=5400, scrolling=True)
-
-
-# ----- Alur utama -----
-if not st.session_state.get("authenticated", False):
-    _render_login()
-else:
-    _render_app()
+if __name__ == "__main__":
+    main()

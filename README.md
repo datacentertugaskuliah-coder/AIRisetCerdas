@@ -1,82 +1,90 @@
-# ALAS v8.11 — Asisten Riset Akademik
+# ARAS v9.1 — Asisten Riset Akademik System
 
 (c) 2024-2026 **Alhumaira Store** · obrolanpintar1987@gmail.com
 
-Penyusun *prompt* akademik untuk peneliti Indonesia, dari skripsi dan tesis
-hingga hibah BIMA dan BRIN. Pilih bidang, jenjang, dan modul; salin ke asisten
-AI pilihan Anda. Core Layer bekerja di balik layar.
+Penyusun *prompt* akademik terpandu untuk peneliti Indonesia. Versi 9.1
+mengubah ALAS menjadi **ARAS** dengan alur berbasis tujuan: pengguna memilih
+bidang dan tujuan, lalu sistem menentukan modul dan aturannya secara otomatis.
+Lapisan Inti (Core Layer) tetap di sisi server.
 
-## Apa yang baru di v8.11 — Modul 16: Laporan Penelitian
+## Apa yang baru di v9.1
 
-Jalur luaran baru: menyusun draf LAPORAN penelitian (bukan proposal),
-melanjutkan Modul 0-7 lalu memakai sumber Modul 8 atau Modul 9.
+- **Ganti nama:** ALAS menjadi **ARAS — Asisten Riset Akademik System**.
+- **Beranda terpandu (R1).** Pengguna memilih Bidang Ilmu lalu Tujuan;
+  Jenjang/Skema terisi otomatis dari Tujuan (tidak ada pilihan ganda yang
+  membingungkan).
+- **Pemetaan Tujuan ke modul:**
+  - Skripsi -> Modul 13
+  - Tesis -> Modul 14
+  - Disertasi -> Modul 15
+  - Hibah BIMA -> Modul 11
+  - BRIN -> Modul 12
+  - Publikasi Internasional -> Modul 10 (target Scopus Q1/Q2/Q3/Q4)
+  - Publikasi SINTA -> Modul 10 (target SINTA 1/2/3/4)
+  - Laporan Penelitian -> Modul 16
+- **Sumber data dikunci per bidang.** Sains dan Teknologi / Ilmu Komputer ->
+  Modul 8 (Dataset). Umum / Sosial dan Humaniora -> Modul 9 (Statistik).
+- **Komposisi sumber bertingkat untuk publikasi (Modul 10):** makin tinggi
+  target, makin dominan rujukan internasional bermutu; makin nasional, makin
+  dominan SINTA. (Q1 90/10 ... SINTA 4 dominan SINTA.)
+- **Prasyarat fondasi (R2).** Modul tujuan TERKUNCI sampai Modul 0-7 ditandai
+  selesai. Indikator status ditampilkan.
+- **Ringkasan konteks (R3)** sebelum merakit prompt.
+- **Core Layer tetap di server.** Hanya hasil rakitan akhir dikirim ke klien.
 
-- **Struktur 5 bagian** fleksibel: Pendahuluan, Metode, Hasil, Pembahasan,
-  Simpulan. Tiap bagian memakai heading dan empat sub-heading, disusun sebagai
-  outline sesuai bidang ilmu.
-- **Justifikasi dan pertanyaan literatur:** paragraf terakhir tiap heading dan
-  sub-heading memuat justifikasi pembahasan, ditutup lima pertanyaan literatur
-  Bahasa Inggris sebagai bagian naskah.
-- **Data kuantitatif anti-fabrikasi:** kerangka tabel, gambar, dan grafik dengan
-  judul dan deskripsi interpretatif; sel angka ditandai
-  "[isi data hasil penelitian Anda]". Tidak ada angka, tabel, atau grafik fiktif.
-- **Outline bercabang bidang:** Saintek/Ilmu Komputer memakai outline teknis
-  eksperimental; Umum/Sosial-Humaniora memakai outline naratif-analitis.
-- **Sumber:** 80% jurnal internasional bereputasi (Scopus Q2/Q3/Q4/IEEE) dan 20%
-  SINTA 1-2, sitasi APA, anti-fabrikasi DOI.
-- Tiap bagian ditulis di kanvas/dokumen terpisah. Selektor bidang ilmu tersedia
-  langsung di halaman Modul 16.
+## Komposisi sumber per target (Modul 10)
 
+| Target | Internasional | SINTA |
+|--------|---------------|-------|
+| Scopus Q1 | 90% (Q1 diutamakan) | 10% (SINTA 1-2) |
+| Scopus Q2 | 80% (Q1/Q2) | 20% (SINTA 1-2) |
+| Scopus Q3 | 70% (Q2/Q3) | 30% (SINTA 1-2) |
+| Scopus Q4 | 60% (Q3/Q4/IEEE) | 40% (SINTA 1-3) |
+| SINTA 1 | 30% (Q3/Q4) | 70% (SINTA 1-2) |
+| SINTA 2 | 20% (Q4/IEEE) | 80% (SINTA 1-3) |
+| SINTA 3 | 10% | 90% (SINTA 1-4) |
+| SINTA 4 | 0-10% | 90-100% (SINTA 1-5) |
 
-## Integritas
+Anti-fabrikasi berlaku di semua tingkat: DOI, tautan, peringkat, dan status open
+access tidak dikarang; yang ragu ditandai untuk verifikasi.
 
-- Angka hasil tidak dikarang; ditandai "[isi dari hasil penelitian Anda]".
-- Standar khas kampus ditandai "[sesuaikan panduan kampus]".
-- DOI, tautan, peringkat SINTA, dan status open access tidak dikarang; yang ragu
-  ditandai "[DOI perlu verifikasi di doi.org]".
-- Gerbang kelengkapan dan mutu rujukan adalah alat bantu, BUKAN jaminan lulus.
-- Firewall Integritas (Seksi K), anti-halusinasi (Seksi E), pengungkapan AI
-  (Seksi O.2), dan Seksi P (Gaya Natural) tetap berlaku penuh.
+## Struktur paket
 
-## Daftar modul (18 total)
+```
+ARAS-v9.1/
+├── app.py                       # entry Streamlit (alur terpandu)
+├── alas_core/
+│   ├── __init__.py
+│   ├── config.py                # bidang, tujuan, pemetaan modul, komposisi
+│   ├── store.py                 # pemuat prompt (SERVER ONLY)
+│   ├── assembler.py             # perakit prompt akhir (SERVER ONLY)
+│   ├── auth.py                  # gerbang ACCESS_KEY (hmac)
+│   └── data/prompts.json        # Lapisan Inti + modul (RAHASIA)
+├── ui/render.py                 # komponen tampilan + alur
+├── tests/test_assembler.py      # 8 uji
+├── requirements.txt
+├── LICENSE
+├── README.md
+├── .gitignore
+├── .gitattributes
+└── .streamlit/{config.toml, secrets.toml.example}
+```
 
-Core Layer, lalu Modul 0-14: pencarian literatur, intake, kontradiksi, rantai
-sitasi, kesenjangan, audit metodologi, rekomendasi judul, hibah dan publikasi,
-rekomendasi dataset (8), statistik multivariat (9), draf artikel IMRAD (10),
-proposal hibah BIMA (11), proposal BRIN RIIM Kompetisi (12), proposal skripsi
-S1 (13), dan proposal tesis S2 (14).
+## Menjalankan secara lokal
 
-## Login berbasis ACCESS_KEY (Streamlit Cloud Secrets Manager)
-
-1. Buka aplikasi di share.streamlit.io.
-2. Menu tiga titik -> Settings -> Secrets.
-3. Masukkan, lalu Save:
-
-   ACCESS_KEY = "kunci-rahasia-anda"
-
-4. Halaman login akan meminta kunci tersebut.
-
-Untuk uji lokal: salin `.streamlit/secrets.toml.example` menjadi
-`.streamlit/secrets.toml`, isi kunci, lalu `streamlit run app.py`.
-
-## Cara menjalankan secara lokal
-
-    pip install -r requirements.txt
-    streamlit run app.py
+```bash
+pip install -r requirements.txt
+cp .streamlit/secrets.toml.example .streamlit/secrets.toml   # isi ACCESS_KEY
+streamlit run app.py
+```
 
 ## Deploy ke Streamlit Cloud
 
-Unggah seluruh isi folder ini ke GitHub, lalu deploy `app.py` di
-share.streamlit.io.
+Unggah folder ini ke GitHub (tanpa secrets.toml), deploy `app.py` di
+share.streamlit.io, lalu isi `ACCESS_KEY` di Settings -> Secrets.
 
-## Struktur berkas
+## Integritas (konsisten)
 
-    ALAS-v8.11/
-    |- app.py
-    |- dashboard.html
-    |- requirements.txt
-    |- ANALISIS_REVISI_CORE_LAYER.md
-    |- .streamlit/config.toml
-    |- .streamlit/secrets.toml.example
-    |- .gitignore
-    |- .gitattributes
+- Anti-deteksi AI tidak diterapkan; Seksi P (Gaya Natural) sebagai gantinya.
+- Tidak ada angka, DOI, peringkat, atau data yang dikarang.
+- Pengungkapan AI (Seksi O.2) tetap berlaku.

@@ -1,54 +1,64 @@
-# Analisis Revisi Core Layer — ALAS v8.10 → v8.11 (Penyeragaman Justifikasi & Bidang: M10, M13)
+# Analisis Revisi Core Layer — ARAS v9.0 → v9.1 (Alur Terpandu Berbasis Tujuan)
 
-Revisi terfokus untuk menyeragamkan tiga fitur di Modul 10, 13, 14, 15. Audit
-menunjukkan sebagian SUDAH ADA; revisi hanya melengkapi yang belum, tanpa
-menumpuk fitur ganda. Tanpa halusinasi, tanpa data palsu, integritas dijaga.
+Penataan ulang ALAS menjadi ARAS dengan alur berbasis tujuan. Isi prompt inti
+tidak diubah; yang ditambah adalah pemetaan tujuan, kunci sumber per bidang,
+komposisi target M10, dan pemandu alur. Tanpa halusinasi, tanpa data palsu.
 
 ## Bagian 1 — Analisis Logis
 
-### 1.1 Temuan audit (jujur)
-| Fitur                         | M10 | M13 | M14 | M15 |
-|-------------------------------|-----|-----|-----|-----|
-| Protokol kanvas baru          | ada | ada | ada | ada |
-| 5 pertanyaan literatur        | ada*| ada | ada | ada |
-| Justifikasi tiap heading/sub  | -   | -   | ada | ada |
-| Selektor bidang di halaman    | -   | ada | ada | ada |
-(*M10 memakai pola lama 6 pertanyaan IMRAD.)
+### 1.1 Perubahan utama
+- Ganti nama ALAS -> ARAS (Asisten Riset Akademik System).
+- Beranda terpandu: Bidang + Tujuan; Jenjang/Skema otomatis dari Tujuan (Opsi 2,
+  menghindari dua pilihan identik yang membingungkan).
+- Tujuan menentukan modul: Skripsi->M13, Tesis->M14, Disertasi->M15,
+  Hibah BIMA->M11, BRIN->M12, Publikasi Internasional->M10 (Q1-Q4),
+  Publikasi SINTA->M10 (SINTA 1-4), Laporan->M16.
+- Sumber data dikunci per bidang: Saintek/Ilkom->M8; Umum/Soshum->M9.
+- Komposisi sumber M10 bertingkat per target (Q1 90/10 ... SINTA 4 dominan SINTA).
 
-### 1.2 Yang dikerjakan (hanya yang belum ada)
-- M10: tambah JUSTIFIKASI; ganti pola 6-pertanyaan menjadi 5 pertanyaan dalam
-  BLOK bertanda "hapus sebelum submit jurnal" (R1, R3); tambah selektor bidang
-  di halaman dengan render live (R4).
-- M13: tambah JUSTIFIKASI di paragraf terakhir tiap heading/sub-heading (R2);
-  5 pertanyaan dan selektor bidang sudah ada (tidak diduplikasi).
-- M14, M15: sudah lengkap; tidak disentuh.
+### 1.2 Keputusan kunci (kejujuran)
+- Dua dropdown identik berisiko kontradiksi; diselesaikan dengan Opsi 2
+  (Jenjang/Skema mengikuti Tujuan).
+- Kunci M8/M9 per bidang mengubah modul luaran agar otomatis, bukan pilihan
+  bebas; ini selaras metodologi (dataset/model untuk teknik, statistik untuk
+  soshum).
+- Komposisi bertingkat tetap anti-fabrikasi; tidak ada DOI/peringkat dikarang.
+- Lapisan Inti tetap server-side; isi prompt inti tidak diubah.
 
-### 1.3 Keputusan kunci (kejujuran)
-- Tidak menumpuk dua sistem pertanyaan di M10 (R1) - pola lama diganti, bukan
-  ditambah.
-- M10 (artikel jurnal) memakai blok "hapus sebelum submit" karena artikel
-  bereputasi tidak lazim memuat blok pertanyaan literatur (R3).
-- Tidak menambah selektor bidang kedua di M13 yang sudah punya (anti-duplikasi).
-- Anti-deteksi AI TIDAK diterapkan; data/DOI tidak dikarang.
+### 1.3 Rekomendasi alur yang diterapkan
+- R1: pemandu alur berbasis tujuan di Beranda.
+- R2: indikator status + penguncian modul tujuan hingga M0-M7 selesai.
+- R3: ringkasan konteks sebelum merakit.
+- (R4 peringatan kombinasi dan R5 riwayat sesi sengaja dilewati: berisiko
+  menghakimi / berlebihan untuk saat ini.)
 
 ## Bagian 2 — Pseudocode
-    ALGORITMA seragamkan(modul):
-        JIKA modul belum punya justifikasi -> tambah di paragraf terakhir tiap
-            heading/sub-heading (rumusan seragam R2)
-        JIKA modul = M10 -> 5 pertanyaan dalam blok "hapus sebelum submit";
-            JANGAN biarkan pola 6-pertanyaan lama tersisa (R1)
-        JIKA modul belum punya selektor bidang di halaman -> tambah + render live
-        JIKA modul sudah punya fitur -> JANGAN duplikasi
+    ALGORITMA alur_terpandu(bidang, tujuan):
+        jenjang := TUJUAN_KE_JENJANG[tujuan]        # otomatis
+        modul   := TUJUAN_KE_MODUL[tujuan]
+        sumber  := (bidang in {Saintek, Ilkom}) ? M8 : M9
+        JIKA tujuan in {Publikasi Internasional, Publikasi SINTA}:
+            target := pilih dari daftar (Q1-Q4 / SINTA 1-4)
+            komposisi := KOMPOSISI_TARGET[target]   # bertingkat
+        JIKA tidak semua M0-M7 selesai: KUNCI tombol rakit
+        LAIN: rakit_sisi_server(modul, konteks)     # hanya hasil akhir ke klien
 
-## Bagian 3 — Lima Rekomendasi (diterapkan)
-1. Hindari penumpukan dua sistem pertanyaan di M10 (ganti, bukan tambah).
-2. Rumusan justifikasi seragam di M10, M13, M14, M15.
-3. M10 memakai blok "hapus sebelum submit jurnal" demi kelayakan submit.
-4. Selektor bidang di halaman M10 dengan render live.
-5. Perapian versi dan registry saat rilis v8.11.
+## Bagian 3 — Lima Rekomendasi (R1-R3 diterapkan)
+1. Pemandu alur berbasis tujuan (R1) - diterapkan.
+2. Indikator status & validasi prasyarat M0-M7 (R2) - diterapkan.
+3. Ringkasan konteks sebelum merakit (R3) - diterapkan.
+4. Peringatan kombinasi tidak lazim (R4) - dilewati (berisiko menghakimi).
+5. Ekspor pilihan & riwayat sesi (R5) - ditunda (berlebihan untuk sekarang).
 
-## Bagian 4 — Ringkasan Peningkatan v8.11 vs v8.10
-- M10 dan M13 kini seragam dengan M14/M15 untuk justifikasi; M10 dapat selektor
-  bidang dan blok pertanyaan yang aman untuk jurnal.
-- Tidak ada fitur ganda; konsistensi lintas-modul meningkat.
-- Integritas tetap utuh; tidak ada klaim berlebih atau data palsu.
+## Bagian 4 — Ringkasan Peningkatan v9.1 vs v9.0
+- ARAS dengan alur terpandu penuh; modul ditentukan tujuan; sumber per bidang;
+  komposisi M10 bertingkat; modul tujuan terkunci hingga fondasi selesai.
+- Integritas tetap utuh; isi prompt inti tidak berubah.
+
+## Bagian 5 — Verifikasi
+- 8/8 uji unit lulus (pemetaan tujuan, kunci sumber, jenjang otomatis, core +
+  sumber, komposisi M10 internasional & SINTA, daftar target, core tak kosong).
+- Uji aplikasi Streamlit: login -> Beranda -> ganti Tujuan mengubah kontrol
+  (Target Publikasi muncul untuk M10); tombol rakit TERKUNCI sebelum M0-M7
+  selesai dan AKTIF setelahnya; perakitan menghasilkan prompt akhir berisi Core
+  Layer tanpa galat.
