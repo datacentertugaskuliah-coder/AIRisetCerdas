@@ -1,54 +1,47 @@
-# Analisis Revisi Core Layer — ALAS v8.10 → v8.11 (Penyeragaman Justifikasi & Bidang: M10, M13)
+# ANALISIS REVISI CORE LAYER — ARAS (v8.11 → v9.1)
 
-Revisi terfokus untuk menyeragamkan tiga fitur di Modul 10, 13, 14, 15. Audit
-menunjukkan sebagian SUDAH ADA; revisi hanya melengkapi yang belum, tanpa
-menumpuk fitur ganda. Tanpa halusinasi, tanpa data palsu, integritas dijaga.
+(c) 2024-2026 Alhumaira Store · obrolanpintar1987@gmail.com
+Catatan internal; tidak dirender ke pengguna.
 
-## Bagian 1 — Analisis Logis
+## 1. Diagnosis
+Core Layer lama berupa aturan datar, sekali jalan, tanpa gerbang. Pada skala
+besar (10 judul) muncul risiko drift konteks, inkonsistensi C→D→E→F, dan
+halusinasi sitasi/dataset.
 
-### 1.1 Temuan audit (jujur)
-| Fitur                         | M10 | M13 | M14 | M15 |
-|-------------------------------|-----|-----|-----|-----|
-| Protokol kanvas baru          | ada | ada | ada | ada |
-| 5 pertanyaan literatur        | ada*| ada | ada | ada |
-| Justifikasi tiap heading/sub  | -   | -   | ada | ada |
-| Selektor bidang di halaman    | -   | ada | ada | ada |
-(*M10 memakai pola lama 6 pertanyaan IMRAD.)
+## 2. Dipertahankan (invarian)
+Anti-halusinasi, firewall integritas, penandaan "[verifikasi]", pengungkapan AI,
+gaya natural, dan sifat tersembunyi Core Layer.
 
-### 1.2 Yang dikerjakan (hanya yang belum ada)
-- M10: tambah JUSTIFIKASI; ganti pola 6-pertanyaan menjadi 5 pertanyaan dalam
-  BLOK bertanda "hapus sebelum submit jurnal" (R1, R3); tambah selektor bidang
-  di halaman dengan render live (R4).
-- M13: tambah JUSTIFIKASI di paragraf terakhir tiap heading/sub-heading (R2);
-  5 pertanyaan dan selektor bidang sudah ada (tidak diduplikasi).
-- M14, M15: sudah lengkap; tidak disentuh.
+## 3. Pseudocode pipeline v9.1
+```
+FUNCTION core_layer(intake, module):
+    ctx = parse(intake)
+    IF missing(ctx.bidang|ctx.skema|ctx.tujuan): RETURN minta_lengkapi()   # gerbang intake
+    MCB = lock(ctx); MCB.novelty = (ctx.tujuan IN {bima,brin}) ? 2 : 1
+    MCB.mode = (ctx.bidang IN {saintek,ilkom}) ? "eksperimental" : "naratif"
+    payload = route(module, MCB)               # M0..M7 + cabang + terminal
+    draft = LLM(payload + FIREWALL)
+    ASSERT peneliti(D) SUBSET peneliti(C)       # gerbang konsistensi
+    ASSERT tahapan(F) SUBSET simpul(E)
+    ASSERT count(novelty) == MCB.novelty
+    draft = naturalize(draft); keep(disclosure_AI)
+    RETURN emit(draft, canvas="BARU", checkpoint=true)
+```
 
-### 1.3 Keputusan kunci (kejujuran)
-- Tidak menumpuk dua sistem pertanyaan di M10 (R1) - pola lama diganti, bukan
-  ditambah.
-- M10 (artikel jurnal) memakai blok "hapus sebelum submit" karena artikel
-  bereputasi tidak lazim memuat blok pertanyaan literatur (R3).
-- Tidak menambah selektor bidang kedua di M13 yang sudah punya (anti-duplikasi).
-- Anti-deteksi AI TIDAK diterapkan; data/DOI tidak dikarang.
+## 4. Konsistensi: invarian vs parameter (Opsi B)
+- Invarian (sama di semua jalur & sepanjang M0–M7): pipeline, firewall, gerbang,
+  pengungkapan AI, gaya natural.
+- Parameter (mengalir via MCB): cabang M8/M9 (bidang), mode outline (bidang),
+  kedalaman (jenjang), terminal + standar Scopus/Sinta (tujuan), novelty (tujuan).
+- M0–M7 memakai Core Layer yang sama; hanya M0 (basis data), M5 (jenis audit),
+  dan M7 (mode desain + novelty) yang menyesuaikan isi. M1–M4 & M6 invarian.
 
-## Bagian 2 — Pseudocode
-    ALGORITMA seragamkan(modul):
-        JIKA modul belum punya justifikasi -> tambah di paragraf terakhir tiap
-            heading/sub-heading (rumusan seragam R2)
-        JIKA modul = M10 -> 5 pertanyaan dalam blok "hapus sebelum submit";
-            JANGAN biarkan pola 6-pertanyaan lama tersisa (R1)
-        JIKA modul belum punya selektor bidang di halaman -> tambah + render live
-        JIKA modul sudah punya fitur -> JANGAN duplikasi
+## 5. Routing Beranda
+Tujuan→terminal: skripsi→13, tesis→14, disertasi→15, bima→11, brin→12,
+intl→10 (Scopus Q1–Q4), sinta→10 (Sinta 1–4), laporan→16.
+Bidang→cabang: {saintek,ilkom}→M8; {umum,soshum}→M9.
+Rail menampilkan M0–M7 saja; cabang + terminal tersimpan sebagai routing.
 
-## Bagian 3 — Lima Rekomendasi (diterapkan)
-1. Hindari penumpukan dua sistem pertanyaan di M10 (ganti, bukan tambah).
-2. Rumusan justifikasi seragam di M10, M13, M14, M15.
-3. M10 memakai blok "hapus sebelum submit jurnal" demi kelayakan submit.
-4. Selektor bidang di halaman M10 dengan render live.
-5. Perapian versi dan registry saat rilis v8.11.
-
-## Bagian 4 — Ringkasan Peningkatan v8.11 vs v8.10
-- M10 dan M13 kini seragam dengan M14/M15 untuk justifikasi; M10 dapat selektor
-  bidang dan blok pertanyaan yang aman untuk jurnal.
-- Tidak ada fitur ganda; konsistensi lintas-modul meningkat.
-- Integritas tetap utuh; tidak ada klaim berlebih atau data palsu.
+## 6. Tidak diimplementasikan
+Fitur "lolos AI detector" tidak dibuat (bertentangan dengan integritas akademik
+dan pengungkapan AI). Diganti peningkatan gaya natural yang etis.

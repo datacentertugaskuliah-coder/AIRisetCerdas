@@ -1,82 +1,85 @@
-# ALAS v8.11 — Asisten Riset Akademik
+# ARAS v9.1 — Asisten Riset Akademik System
 
 (c) 2024-2026 **Alhumaira Store** · obrolanpintar1987@gmail.com
 
-Penyusun *prompt* akademik untuk peneliti Indonesia, dari skripsi dan tesis
-hingga hibah BIMA dan BRIN. Pilih bidang, jenjang, dan modul; salin ke asisten
-AI pilihan Anda. Core Layer bekerja di balik layar.
+Penyusun *prompt* akademik untuk peneliti Indonesia (skripsi, tesis, disertasi,
+Hibah BIMA, BRIN, publikasi internasional/Sinta, laporan penelitian). Beranda
+menjadi panel manajemen proses; salin prompt tiap modul ke asisten AI mana pun.
+**Core Layer berjalan tersembunyi.**
 
-## Apa yang baru di v8.11 — Modul 16: Laporan Penelitian
+## Beranda — Dashboard & panduan
 
-Jalur luaran baru: menyusun draf LAPORAN penelitian (bukan proposal),
-melanjutkan Modul 0-7 lalu memakai sumber Modul 8 atau Modul 9.
+Tiga pilihan menggerakkan seluruh sistem:
 
-- **Struktur 5 bagian** fleksibel: Pendahuluan, Metode, Hasil, Pembahasan,
-  Simpulan. Tiap bagian memakai heading dan empat sub-heading, disusun sebagai
-  outline sesuai bidang ilmu.
-- **Justifikasi dan pertanyaan literatur:** paragraf terakhir tiap heading dan
-  sub-heading memuat justifikasi pembahasan, ditutup lima pertanyaan literatur
-  Bahasa Inggris sebagai bagian naskah.
-- **Data kuantitatif anti-fabrikasi:** kerangka tabel, gambar, dan grafik dengan
-  judul dan deskripsi interpretatif; sel angka ditandai
-  "[isi data hasil penelitian Anda]". Tidak ada angka, tabel, atau grafik fiktif.
-- **Outline bercabang bidang:** Saintek/Ilmu Komputer memakai outline teknis
-  eksperimental; Umum/Sosial-Humaniora memakai outline naratif-analitis.
-- **Sumber:** 80% jurnal internasional bereputasi (Scopus Q2/Q3/Q4/IEEE) dan 20%
-  SINTA 1-2, sitasi APA, anti-fabrikasi DOI.
-- Tiap bagian ditulis di kanvas/dokumen terpisah. Selektor bidang ilmu tersedia
-  langsung di halaman Modul 16.
+1. **Bidang Ilmu**: Umum · Sosial & Humaniora · Sains & Teknologi · Ilmu Komputer
+2. **Jenjang / Skema** (8 item; penegas konteks)
+3. **Tujuan** (driver routing)
 
+Routing modul terminal mengikuti **Tujuan**:
+Skripsi→M13 · Tesis→M14 · Disertasi→M15 · Hibah Bima→M11 · BRIN→M12 ·
+Publikasi Internasional→M10 (tier Scopus Q1–Q4) · Publikasi Sinta→M10
+(tier Sinta 1–4) · Laporan Penelitian→M16.
+
+Cabang per bidang: **M8 (dataset)** untuk Sains & Teknologi / Ilmu Komputer;
+**M9 (statistik multivariat)** untuk Umum / Sosial & Humaniora.
+
+Rail proses menampilkan **M0–M7 saja**. Cabang M8/M9 dan modul terminal hanya
+tersimpan sebagai routing (dijalankan setelah M7), dengan tombol salin prompt
+terpisah di kotak routing.
+
+## Prompt per modul (salin-tempel)
+
+Klik M0–M7 untuk memunculkan prompt yang sudah menyertakan konteks pilihan,
+MCB, dan aturan integritas, lalu salin ke ChatGPT/Claude/Gemini/Copilot/DeepSeek.
+
+Adaptasi konteks (Opsi B): **M0** basis data per bidang · **M5** jenis audit
+(eksperimental vs naratif/kualitatif) · **M7** mode desain + jumlah novelty.
+M1–M4 dan M6 berstruktur sama (invarian). M7 menyediakan alat bertahap: tempel
+10 judul (dari M6) → tombol per judul → prompt A–F di canvas baru, satu per
+canvas (siasati limit).
+
+## Core Layer (tersembunyi) — pipeline 7 tahap
+
+intake → context-lock (MCB) → router → firewall integritas → gerbang
+konsistensi C→D→E→F → naturalizer (gaya natural, pengungkapan AI tetap) →
+output (canvas baru + checkpoint). Rincian: `ANALISIS_REVISI_CORE_LAYER.md`.
 
 ## Integritas
 
-- Angka hasil tidak dikarang; ditandai "[isi dari hasil penelitian Anda]".
-- Standar khas kampus ditandai "[sesuaikan panduan kampus]".
-- DOI, tautan, peringkat SINTA, dan status open access tidak dikarang; yang ragu
-  ditandai "[DOI perlu verifikasi di doi.org]".
-- Gerbang kelengkapan dan mutu rujukan adalah alat bantu, BUKAN jaminan lulus.
-- Firewall Integritas (Seksi K), anti-halusinasi (Seksi E), pengungkapan AI
-  (Seksi O.2), dan Seksi P (Gaya Natural) tetap berlaku penuh.
+Angka, DOI, peringkat, dan ketersediaan tidak dikarang; yang ragu ditandai untuk
+verifikasi. Tidak ada fitur pengelabuan detektor AI; pengungkapan AI
+dipertahankan.
 
-## Daftar modul (18 total)
+## Login (Streamlit Cloud Secrets Manager)
 
-Core Layer, lalu Modul 0-14: pencarian literatur, intake, kontradiksi, rantai
-sitasi, kesenjangan, audit metodologi, rekomendasi judul, hibah dan publikasi,
-rekomendasi dataset (8), statistik multivariat (9), draf artikel IMRAD (10),
-proposal hibah BIMA (11), proposal BRIN RIIM Kompetisi (12), proposal skripsi
-S1 (13), dan proposal tesis S2 (14).
+Settings → Secrets, lalu:
 
-## Login berbasis ACCESS_KEY (Streamlit Cloud Secrets Manager)
+    ACCESS_KEY = "kunci-rahasia-anda"
 
-1. Buka aplikasi di share.streamlit.io.
-2. Menu tiga titik -> Settings -> Secrets.
-3. Masukkan, lalu Save:
+Uji lokal: salin `.streamlit/secrets.toml.example` → `.streamlit/secrets.toml`,
+isi kunci, lalu `streamlit run app.py`.
 
-   ACCESS_KEY = "kunci-rahasia-anda"
+## Jalankan lokal
 
-4. Halaman login akan meminta kunci tersebut.
+```
+pip install -r requirements.txt
+streamlit run app.py
+```
 
-Untuk uji lokal: salin `.streamlit/secrets.toml.example` menjadi
-`.streamlit/secrets.toml`, isi kunci, lalu `streamlit run app.py`.
+## Deploy
 
-## Cara menjalankan secara lokal
+Unggah seluruh isi folder ke GitHub, deploy `app.py` di share.streamlit.io.
 
-    pip install -r requirements.txt
-    streamlit run app.py
+## Struktur
 
-## Deploy ke Streamlit Cloud
-
-Unggah seluruh isi folder ini ke GitHub, lalu deploy `app.py` di
-share.streamlit.io.
-
-## Struktur berkas
-
-    ALAS-v8.11/
-    |- app.py
-    |- dashboard.html
-    |- requirements.txt
-    |- ANALISIS_REVISI_CORE_LAYER.md
-    |- .streamlit/config.toml
-    |- .streamlit/secrets.toml.example
-    |- .gitignore
-    |- .gitattributes
+```
+ARAS-v9.1/
+|- app.py
+|- dashboard.html
+|- requirements.txt
+|- ANALISIS_REVISI_CORE_LAYER.md
+|- .streamlit/config.toml
+|- .streamlit/secrets.toml.example
+|- .gitignore
+|- .gitattributes
+```
