@@ -1,64 +1,54 @@
-# Analisis Revisi Core Layer — ARAS v9.0 → v9.1 (Alur Terpandu Berbasis Tujuan)
+# Analisis Revisi — ARAS v9.1 → v9.2 (Prasyarat M0-M7 Bertahap Berurutan)
 
-Penataan ulang ALAS menjadi ARAS dengan alur berbasis tujuan. Isi prompt inti
-tidak diubah; yang ditambah adalah pemetaan tujuan, kunci sumber per bidang,
-komposisi target M10, dan pemandu alur. Tanpa halusinasi, tanpa data palsu.
+Revisi terfokus pada perilaku prasyarat fondasi: dari centang bebas menjadi
+bertahap berurutan dengan cascade reset. Isi prompt inti tidak diubah. Tanpa
+halusinasi, tanpa data palsu.
 
 ## Bagian 1 — Analisis Logis
 
-### 1.1 Perubahan utama
-- Ganti nama ALAS -> ARAS (Asisten Riset Akademik System).
-- Beranda terpandu: Bidang + Tujuan; Jenjang/Skema otomatis dari Tujuan (Opsi 2,
-  menghindari dua pilihan identik yang membingungkan).
-- Tujuan menentukan modul: Skripsi->M13, Tesis->M14, Disertasi->M15,
-  Hibah BIMA->M11, BRIN->M12, Publikasi Internasional->M10 (Q1-Q4),
-  Publikasi SINTA->M10 (SINTA 1-4), Laporan->M16.
-- Sumber data dikunci per bidang: Saintek/Ilkom->M8; Umum/Soshum->M9.
-- Komposisi sumber M10 bertingkat per target (Q1 90/10 ... SINTA 4 dominan SINTA).
+### 1.1 Masalah pada v9.1
+Kedelapan checkbox M0-M7 dapat dicentang dalam urutan apa pun. Ini memungkinkan
+keadaan janggal (mis. M5 tercentang tanpa M0-M4), padahal alur riset bersifat
+berurutan: pencarian literatur -> intake -> analisis -> dst.
 
-### 1.2 Keputusan kunci (kejujuran)
-- Dua dropdown identik berisiko kontradiksi; diselesaikan dengan Opsi 2
-  (Jenjang/Skema mengikuti Tujuan).
-- Kunci M8/M9 per bidang mengubah modul luaran agar otomatis, bukan pilihan
-  bebas; ini selaras metodologi (dataset/model untuk teknik, statistik untuk
-  soshum).
-- Komposisi bertingkat tetap anti-fabrikasi; tidak ada DOI/peringkat dikarang.
-- Lapisan Inti tetap server-side; isi prompt inti tidak diubah.
+### 1.2 Solusi (v9.2)
+- BERTAHAP: M0 aktif sejak awal; M(n) terkunci (disabled) sampai M(n-1) selesai.
+- CASCADE RESET: membatalkan centang M(n) otomatis membatalkan M(n+1)..M7,
+  sehingga status selalu konsisten dengan urutan.
+- Modul tujuan tetap terkunci sampai seluruh M0-M7 selesai.
 
-### 1.3 Rekomendasi alur yang diterapkan
-- R1: pemandu alur berbasis tujuan di Beranda.
-- R2: indikator status + penguncian modul tujuan hingga M0-M7 selesai.
-- R3: ringkasan konteks sebelum merakit.
-- (R4 peringatan kombinasi dan R5 riwayat sesi sengaja dilewati: berisiko
-  menghakimi / berlebihan untuk saat ini.)
+### 1.3 Keputusan kunci (kejujuran)
+- Dipilih cascade reset (bukan "kunci ke depan saja") karena paling konsisten
+  dengan aturan berurutan: mustahil M(n) benar selesai bila prasyaratnya batal.
+- Implementasi menegakkan aturan pada state widget (key fon_*) agar checkbox
+  hilir benar-benar ter-uncheck secara visual, bukan hanya di data.
+- Tidak ada penanda visual khusus "giliran berikutnya" (sesuai pilihan pengguna);
+  cukup penguncian + pesan langkah berikutnya.
 
 ## Bagian 2 — Pseudocode
-    ALGORITMA alur_terpandu(bidang, tujuan):
-        jenjang := TUJUAN_KE_JENJANG[tujuan]        # otomatis
-        modul   := TUJUAN_KE_MODUL[tujuan]
-        sumber  := (bidang in {Saintek, Ilkom}) ? M8 : M9
-        JIKA tujuan in {Publikasi Internasional, Publikasi SINTA}:
-            target := pilih dari daftar (Q1-Q4 / SINTA 1-4)
-            komposisi := KOMPOSISI_TARGET[target]   # bertingkat
-        JIKA tidak semua M0-M7 selesai: KUNCI tombol rakit
-        LAIN: rakit_sisi_server(modul, konteks)     # hanya hasil akhir ke klien
+    ALGORITMA prasyarat_berurutan(fondasi):
+        # pra-pass: tegakkan urutan pada state widget
+        putus := salah
+        UNTUK m DALAM fondasi (urut):
+            JIKA putus: paksa state[m] := False        # cascade reset
+            LAIN JIKA NOT state[m]: putus := benar
+        # render
+        UNTUK i, m DALAM fondasi:
+            prasyarat_ok := semua(done[fondasi[j]] untuk j < i)
+            tampilkan checkbox(m, disabled = NOT prasyarat_ok)
+            done[m] := nilai_centang AND prasyarat_ok
+        KEMBALIKAN semua(done)
 
-## Bagian 3 — Lima Rekomendasi (R1-R3 diterapkan)
-1. Pemandu alur berbasis tujuan (R1) - diterapkan.
-2. Indikator status & validasi prasyarat M0-M7 (R2) - diterapkan.
-3. Ringkasan konteks sebelum merakit (R3) - diterapkan.
-4. Peringatan kombinasi tidak lazim (R4) - dilewati (berisiko menghakimi).
-5. Ekspor pilihan & riwayat sesi (R5) - ditunda (berlebihan untuk sekarang).
+## Bagian 3 — Verifikasi
+- Awal: hanya M0 aktif; M1-M7 terkunci. (terverifikasi)
+- Setelah M0 dicentang: M1 terbuka; M2-M7 tetap terkunci. (terverifikasi)
+- Setelah M0,M1,M2 lalu M1 dibatalkan: M2 ikut batal dan terkunci kembali;
+  M0 tetap. (terverifikasi cascade reset)
+- Setelah M0-M7 dicentang berurutan: tombol rakit aktif; perakitan menghasilkan
+  prompt akhir berisi Core Layer tanpa galat. (terverifikasi)
+- 8/8 uji unit assembler tetap lulus.
 
-## Bagian 4 — Ringkasan Peningkatan v9.1 vs v9.0
-- ARAS dengan alur terpandu penuh; modul ditentukan tujuan; sumber per bidang;
-  komposisi M10 bertingkat; modul tujuan terkunci hingga fondasi selesai.
-- Integritas tetap utuh; isi prompt inti tidak berubah.
-
-## Bagian 5 — Verifikasi
-- 8/8 uji unit lulus (pemetaan tujuan, kunci sumber, jenjang otomatis, core +
-  sumber, komposisi M10 internasional & SINTA, daftar target, core tak kosong).
-- Uji aplikasi Streamlit: login -> Beranda -> ganti Tujuan mengubah kontrol
-  (Target Publikasi muncul untuk M10); tombol rakit TERKUNCI sebelum M0-M7
-  selesai dan AKTIF setelahnya; perakitan menghasilkan prompt akhir berisi Core
-  Layer tanpa galat.
+## Bagian 4 — Yang dipertahankan
+Seluruh pemetaan tujuan, kunci sumber per bidang, komposisi target M10, Core
+Layer server-side, anti-deteksi AI tidak diterapkan, anti-fabrikasi. Isi prompt
+inti tidak berubah.

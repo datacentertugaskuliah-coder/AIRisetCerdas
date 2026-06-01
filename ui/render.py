@@ -86,21 +86,54 @@ def topic_and_specifics(st, ctx, module_id: str) -> None:
 
 
 def prasyarat_status(st, ss) -> bool:
-    """R2: tampilkan status fondasi M0-M7; kembalikan True jika semua selesai."""
-    st.markdown("##### Prasyarat — selesaikan Modul 0 sampai Modul 7 dulu")
-    done = ss.setdefault("aras_fondasi_done", {m: False for m in config.FONDASI})
+    """R2: status fondasi M0-M7 BERTAHAP BERURUTAN dengan cascade reset.
+
+    Aturan:
+    - M0 aktif sejak awal; M(n) terkunci sampai M(n-1) selesai.
+    - Membatalkan centang M(n) ikut membatalkan M(n+1)..M7 (cascade reset),
+      agar status selalu konsisten dengan urutan.
+    """
+    st.markdown("##### Prasyarat — selesaikan Modul 0 sampai Modul 7 dulu (bertahap)")
+    fondasi = config.FONDASI
+
+    # Pra-pass: tegakkan aturan berurutan pada state widget (ss[f"fon_{m}"]).
+    # Begitu menemukan modul yang belum dicentang, semua sesudahnya dipaksa False.
+    putus = False
+    for i, m in enumerate(fondasi):
+        key = f"fon_{m}"
+        if putus:
+            # Prasyarat tidak terpenuhi -> paksa batal (cascade reset).
+            if ss.get(key, False):
+                ss[key] = False
+        else:
+            if not ss.get(key, False):
+                putus = True  # mulai dari sini ke bawah terkunci/batal
+
+    # Render checkbox dengan penguncian berurutan.
     cols = st.columns(4)
-    label = {m: f"{m.upper()}" for m in config.FONDASI}
-    for i, m in enumerate(config.FONDASI):
+    done: dict[str, bool] = {}
+    for i, m in enumerate(fondasi):
+        key = f"fon_{m}"
+        prasyarat_ok = all(done.get(fondasi[j], False) for j in range(i))
         with cols[i % 4]:
-            done[m] = st.checkbox(label[m] + " selesai", value=done.get(m, False), key=f"fon_{m}")
+            val = st.checkbox(
+                f"{m.upper()} selesai",
+                key=key,
+                disabled=not prasyarat_ok,
+            )
+        done[m] = bool(val) and prasyarat_ok
+
     ss["aras_fondasi_done"] = done
+
     semua = all(done.values())
-    sisa = [m.upper() for m in config.FONDASI if not done[m]]
     if semua:
-        st.success("Semua modul fondasi (M0-M7) ditandai selesai. Modul tujuan aktif.")
+        st.success("Semua modul fondasi (M0-M7) selesai berurutan. Modul tujuan aktif.")
     else:
-        st.warning(f"Modul tujuan masih TERKUNCI. Selesaikan dulu: {', '.join(sisa)}.")
+        berikut = next((m.upper() for m in fondasi if not done[m]), None)
+        st.warning(
+            f"Modul tujuan masih TERKUNCI. Langkah berikutnya: selesaikan "
+            f"{berikut}. (Modul setelahnya terkunci sampai {berikut} dicentang.)"
+        )
     return semua
 
 
