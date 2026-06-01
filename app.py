@@ -47,8 +47,10 @@ def main() -> None:
     module_id = ctx.module_id
 
     st.divider()
-    # R2: prasyarat fondasi M0-M7.
-    siap = render.prasyarat_status(st, st.session_state)
+    # Gaya v8.11: prasyarat M0-M7 sebagai PENGINGAT (bukan penguncian UI).
+    # Penjagaan urutan dilakukan oleh blok PEMERIKSAAN PRA-KONDISI di dalam prompt
+    # yang dibaca AI tujuan.
+    render.prasyarat_note(st)
 
     st.divider()
     meta = next((m for m in config.MODULES if m[0] == module_id), None)
@@ -64,11 +66,6 @@ def main() -> None:
 
     st.divider()
     render.ringkasan_konteks(st, ctx, module_id)  # R3
-
-    if not siap:
-        st.button("Rakit & Salin Prompt (+ Core Layer)", disabled=True)
-        st.caption("Tombol terkunci sampai Modul 0-7 ditandai selesai.")
-        return
 
     if st.button("Rakit & Salin Prompt (+ Core Layer)", type="primary"):
         final_prompt = assembler.assemble(module_id, ctx)

@@ -85,56 +85,21 @@ def topic_and_specifics(st, ctx, module_id: str) -> None:
                                   placeholder="pangan; kesehatan; energi; ...")
 
 
-def prasyarat_status(st, ss) -> bool:
-    """R2: status fondasi M0-M7 BERTAHAP BERURUTAN dengan cascade reset.
+def prasyarat_note(st) -> None:
+    """Gaya v8.11: prasyarat M0-M7 sebagai PENGINGAT, bukan penguncian UI.
 
-    Aturan:
-    - M0 aktif sejak awal; M(n) terkunci sampai M(n-1) selesai.
-    - Membatalkan centang M(n) ikut membatalkan M(n+1)..M7 (cascade reset),
-      agar status selalu konsisten dengan urutan.
+    Urutan dijaga oleh blok PEMERIKSAAN PRA-KONDISI di dalam prompt yang dibaca
+    AI tujuan (ChatGPT/Claude/dll), bukan dikunci oleh dashboard.
     """
-    st.markdown("##### Prasyarat — selesaikan Modul 0 sampai Modul 7 dulu (bertahap)")
-    fondasi = config.FONDASI
-
-    # Pra-pass: tegakkan aturan berurutan pada state widget (ss[f"fon_{m}"]).
-    # Begitu menemukan modul yang belum dicentang, semua sesudahnya dipaksa False.
-    putus = False
-    for i, m in enumerate(fondasi):
-        key = f"fon_{m}"
-        if putus:
-            # Prasyarat tidak terpenuhi -> paksa batal (cascade reset).
-            if ss.get(key, False):
-                ss[key] = False
-        else:
-            if not ss.get(key, False):
-                putus = True  # mulai dari sini ke bawah terkunci/batal
-
-    # Render checkbox dengan penguncian berurutan.
-    cols = st.columns(4)
-    done: dict[str, bool] = {}
-    for i, m in enumerate(fondasi):
-        key = f"fon_{m}"
-        prasyarat_ok = all(done.get(fondasi[j], False) for j in range(i))
-        with cols[i % 4]:
-            val = st.checkbox(
-                f"{m.upper()} selesai",
-                key=key,
-                disabled=not prasyarat_ok,
-            )
-        done[m] = bool(val) and prasyarat_ok
-
-    ss["aras_fondasi_done"] = done
-
-    semua = all(done.values())
-    if semua:
-        st.success("Semua modul fondasi (M0-M7) selesai berurutan. Modul tujuan aktif.")
-    else:
-        berikut = next((m.upper() for m in fondasi if not done[m]), None)
-        st.warning(
-            f"Modul tujuan masih TERKUNCI. Langkah berikutnya: selesaikan "
-            f"{berikut}. (Modul setelahnya terkunci sampai {berikut} dicentang.)"
-        )
-    return semua
+    st.markdown("##### Prasyarat — selesaikan Modul 0 sampai Modul 7 dulu")
+    st.info(
+        "Sebelum modul tujuan, pastikan Modul 0 sampai Modul 7 telah dijalankan "
+        "secara berurutan, lalu pilih Modul 8 (Dataset) untuk Sains/Ilmu Komputer "
+        "atau Modul 9 (Statistik) untuk Umum/Sosial-Humaniora.\n\n"
+        "Catatan: penjagaan urutan dilakukan oleh blok PEMERIKSAAN PRA-KONDISI di "
+        "dalam prompt yang dibaca AI tujuan — sesuai gaya v8.11. Jika prasyarat "
+        "belum terpenuhi, AI akan berhenti dan meminta Anda melengkapinya."
+    )
 
 
 def ringkasan_konteks(st, ctx, module_id: str) -> None:
