@@ -1,8 +1,8 @@
 """
-ARAS v9.2 — Asisten Riset Akademik System
+ARAS v9.3 — Asisten Riset Akademik System
 (c) 2024-2026 Alhumaira Store | obrolanpintar1987@gmail.com
 
-Pembungkus Streamlit untuk dashboard ARAS v9.2 dengan gerbang login berbasis
+Pembungkus Streamlit untuk dashboard ARAS v9.3 dengan gerbang login berbasis
 ACCESS_KEY yang disimpan di Streamlit Cloud Secrets Manager.
 
 Keamanan:
@@ -11,7 +11,7 @@ Keamanan:
 - Perbandingan kunci memakai hmac.compare_digest (tahan serangan timing).
 - Pembatasan percobaan per sesi.
 
-Catatan v9.2:
+Catatan v9.3:
 - Beranda menjadi panel manajemen proses (M0-M7) dengan prompt salin-tempel.
 - Core Layer TERSEMBUNYI: konstanta di dashboard.html, hanya disuntik ke prompt.
 """
@@ -24,13 +24,13 @@ import streamlit as st
 import streamlit.components.v1 as components
 
 st.set_page_config(
-    page_title="ARAS v9.2 - Asisten Riset Akademik System",
+    page_title="ARAS v9.3 - Asisten Riset Akademik System",
     page_icon="\U0001F4DA",
     layout="wide",
     initial_sidebar_state="collapsed",
     menu_items={
         "About": (
-            "ARAS v9.2 - Asisten Riset Akademik System\n"
+            "ARAS v9.3 - Asisten Riset Akademik System\n"
             "Core Layer tersembunyi (pipeline 7 tahap) - Beranda manajemen proses M0-M7\n"
             "(c) 2024-2026 Alhumaira Store\n"
             "obrolanpintar1987@gmail.com"
@@ -76,7 +76,7 @@ def _render_login() -> None:
     st.markdown(
         '<div class="aras-card">'
         '<div class="aras-logo">AR</div>'
-        '<div class="aras-title">ARAS v9.2</div>'
+        '<div class="aras-title">ARAS v9.3</div>'
         '<div class="aras-sub">Asisten Riset Akademik System &middot; Akses Terbatas</div>',
         unsafe_allow_html=True,
     )

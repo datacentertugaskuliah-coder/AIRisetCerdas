@@ -1,4 +1,4 @@
-# ANALISIS REVISI CORE LAYER — ARAS (v8.11 → v9.2)
+# ANALISIS REVISI CORE LAYER — ARAS (v8.11 → v9.3)
 
 (c) 2024-2026 Alhumaira Store · obrolanpintar1987@gmail.com
 Catatan internal; tidak dirender ke pengguna.
@@ -59,3 +59,11 @@ dan pengungkapan AI). Diganti peningkatan gaya natural yang etis.
   Publikasi Internasional -> Improvement/Invention; Sinta -> Improvement;
   Laporan -> Application. Jumlah & tipe novelty adalah dua atribut terpisah.
 - Tipe novelty masuk ke MCB ("Tipe novelty") agar konsisten di modul terminal.
+
+## 8. Tambahan v9.3
+- M0 dua mode: (1) Standar (default, bawaan ARAS) = prompt strategi pencarian;
+  (2) Analisis Dokumen Manual = prompt yang memerintahkan mesin AI menganalisis
+  hingga 10 PDF yang dilampirkan PENGGUNA di mesin AI. ARAS tidak menerima/
+  memproses file (tanpa kotak unggah); pemicu ada di M0. M1-M7 tetap standar.
+- Pengaman integritas mode-2: simpulkan hanya dari isi PDF; "[tidak ditemukan di
+  dokumen]" bila tak ada; larangan sumber luar & fabrikasi; saran proses bertahap.

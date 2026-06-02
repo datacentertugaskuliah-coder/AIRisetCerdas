@@ -1,5 +1,5 @@
 <!--
-  ARAS v9.2 — Dashboard Asisten Riset Akademik System
+  ARAS v9.3 — Dashboard Asisten Riset Akademik System
   (c) 2024-2026 Alhumaira Store · obrolanpintar1987@gmail.com
 
   Core Layer TERSEMBUNYI: konstanta JS (CORE_LAYER), tidak pernah dirender ke DOM,
@@ -123,7 +123,7 @@
       <div class="seal">AR</div>
       <div><h1>ARAS</h1><div class="tag">Asisten Riset Akademik System</div></div>
     </div>
-    <div class="ver">v9.2 · Beranda Proses</div>
+    <div class="ver">v9.3 · Beranda Proses</div>
   </header>
 
   <!-- ===== BERANDA: kendali konteks ===== -->
@@ -184,6 +184,17 @@
 
     <div class="rail" id="rail"></div>
 
+    <div id="m0modeWrap" class="hide" style="margin-top:6px;background:var(--card2);border:1px solid var(--line);border-radius:11px;padding:11px 13px">
+      <label class="fld" style="margin-bottom:8px">Mode M0</label>
+      <div class="rowflex">
+        <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:14.5px">
+          <input type="radio" name="m0mode" value="standar" checked> Standar <span style="color:var(--muted);font-size:12px">(bawaan ARAS)</span></label>
+        <label style="display:flex;align-items:center;gap:7px;cursor:pointer;font-size:14.5px">
+          <input type="radio" name="m0mode" value="pdf"> Analisis Dokumen Manual <span style="color:var(--muted);font-size:12px">(lampirkan ≤10 PDF di mesin AI)</span></label>
+      </div>
+      <p class="note" id="m0hint" style="margin-top:8px"></p>
+    </div>
+
     <div class="promptbar">
       <span class="pt" id="pt">M0 · Pencarian literatur</span>
       <div class="rowflex">
@@ -211,7 +222,7 @@
   </section>
 
   <footer>
-    ARAS v9.2 · (c) 2024–2026 Alhumaira Store · obrolanpintar1987@gmail.com<br>
+    ARAS v9.3 · (c) 2024–2026 Alhumaira Store · obrolanpintar1987@gmail.com<br>
     Core Layer tersembunyi · integritas &amp; anti-halusinasi aktif · pengungkapan AI dipertahankan
   </footer>
 </div>
@@ -286,10 +297,19 @@ Topik  : ${c.k}
 === AKHIR MCB ===`;}
 function head(c){return `[ATURAN: jaga integritas; jangan mengarang angka/DOI/sumber; tandai yang ragu "[perlu verifikasi]"; gaya natural; berlaku untuk ChatGPT/Claude/Gemini/Copilot/DeepSeek/dll.]`;}
 
+function m0mode(){const r=document.querySelector('input[name="m0mode"]:checked');return r?r.value:"standar";}
 function P(m){
   const c=ctx();
   const B={
-0:`TUGAS M0 — Pencarian Literatur (bidang ${c.bl}).
+0:(m0mode()==="pdf")?`TUGAS M0 — Analisis Dokumen Manual (bidang ${c.bl}).
+Saya melampirkan HINGGA 10 file PDF pada percakapan ini. Analisis HANYA isi PDF yang saya lampirkan.
+Untuk SETIAP dokumen, ekstrak: (a) tujuan/pertanyaan, (b) metode, (c) temuan utama, (d) keterbatasan, (e) GAP.
+Lalu SINTESIS lintas dokumen: peta literatur, pola/persamaan, perbedaan/kontradiksi, dan GAP gabungan
+yang relevan dengan topik & tujuan (${c.tl}).
+Integritas: simpulkan hanya dari isi PDF; jika tidak ada, tulis "[tidak ditemukan di dokumen]";
+jangan menambah sumber luar; jangan mengarang angka, DOI, atau temuan.
+Bila dokumen banyak/panjang melebihi kapasitas, proses bertahap (mis. 5 PDF dulu, lalu lanjutkan).
+Sajikan ringkas dan terstruktur (boleh tabel ringkas per dokumen).`:`TUGAS M0 — Pencarian Literatur (bidang ${c.bl}).
 Susun strategi pencarian untuk topik di atas:
 1) 8–12 kata kunci (Indonesia + Inggris) + sinonim + string Boolean (AND/OR).
 2) Basis data yang relevan untuk bidang ini: ${DB[c.b]}.
@@ -380,6 +400,10 @@ function renderPrompt(){
   $("pt").textContent=`M${sel} · ${NAMES[sel][0]}`;
   $("out").value=P(sel);
   $("m7tool").classList.toggle("hide",sel!==7);
+  $("m0modeWrap").classList.toggle("hide",sel!==0);
+  if(sel===0){$("m0hint").textContent=(m0mode()==="pdf")
+    ? "File PDF TIDAK dikirim/diproses oleh ARAS. Lampirkan PDF langsung di mesin AI, lalu tempel prompt ini."
+    : "Mode bawaan: prompt strategi pencarian literatur.";}
 }
 function renderRoute(){
   const c=ctx();
@@ -417,13 +441,16 @@ function renderTitles(){
 /* ===== events ===== */
 $("copy").onclick=()=>copy($("out").value,`Prompt M${sel} tersalin — tempel ke mesin AI Anda.`);
 $("reset").onclick=()=>{["bidang","skema","tujuan"].forEach(id=>$(id).selectedIndex=(id==="bidang"?2:0));$("topik").value="";
-  titles=[];done.clear();$("paste").value="";$("tbtns").innerHTML="";$("m7prog").textContent="";sel=0;renderRoute();renderPrompt();toast("Direset.");};
+  titles=[];done.clear();$("paste").value="";$("tbtns").innerHTML="";$("m7prog").textContent="";sel=0;
+  var rs=document.querySelector('input[name="m0mode"][value="standar"]');if(rs)rs.checked=true;
+  renderRoute();renderPrompt();toast("Direset.");};
 $("copyBranch").onclick=()=>{const c=ctx();copy(P(c.branchMod),`Prompt cabang M${c.branchMod} tersalin.`);};
 $("copyTerm").onclick=()=>{const c=ctx();copy(P(c.term),`Prompt terminal M${c.term} tersalin.`);};
 $("buildList").onclick=()=>{const p=parseT($("paste").value);if(!p.length){toast("Tempel dulu judul-judulnya.");return;}titles=p;done.clear();renderTitles();$("m7prog").textContent=`Progres: 0/${titles.length} judul`;toast(`${titles.length} judul siap.`);};
 ["bidang","skema","tujuan"].forEach(id=>$(id).onchange=()=>{renderRoute();renderPrompt();});
 $("tier").onchange=()=>{renderRoute();renderPrompt();};
 $("topik").oninput=()=>$("out").value=P(sel);
+document.querySelectorAll('input[name="m0mode"]').forEach(r=>r.onchange=()=>renderPrompt());
 
 renderRoute();renderPrompt();
 </script>
