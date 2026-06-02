@@ -1,4 +1,4 @@
-# ANALISIS REVISI CORE LAYER — ARAS (v8.11 → v9.3)
+# ANALISIS REVISI CORE LAYER — ARAS (v8.11 → v9.4)
 
 (c) 2024-2026 Alhumaira Store · obrolanpintar1987@gmail.com
 Catatan internal; tidak dirender ke pengguna.
@@ -67,3 +67,16 @@ dan pengungkapan AI). Diganti peningkatan gaya natural yang etis.
   memproses file (tanpa kotak unggah); pemicu ada di M0. M1-M7 tetap standar.
 - Pengaman integritas mode-2: simpulkan hanya dari isi PDF; "[tidak ditemukan di
   dokumen]" bila tak ada; larangan sumber luar & fabrikasi; saran proses bertahap.
+
+## 9. Tambahan v9.4 (sub-skema, terverifikasi dari sumber resmi)
+- Pola sub-skema (yang sebelumnya hanya Scopus/Sinta) diperluas ke Hibah BIMA
+  dan BRIN. Sub-skema masuk MCB ("Sub-skema/Tier") dan menyetel standar di prompt
+  modul terminal (M10/M11/M12). Routing terminal TIDAK berubah.
+- BIMA (DRTPM/Kemdiktisaintek), 6 skema relevan dosen: PDP, PDP Afirmasi,
+  Penelitian Fundamental (Reguler), PKDN, Terapan-Luaran Model, Terapan-Luaran
+  Prototipe. Sumber: pengumuman DRTPM/BIMA 2024-2025.
+- BRIN (RIIM), Opsi 1 (stabil): RIIM Kompetisi, RIIM Ekspedisi, RIIM Invitasi,
+  RIIM Kolaborasi, RIIM Start-Up. UI memberi catatan "sesuaikan panduan tahun
+  berjalan" karena nama/jumlah skema berubah per tahun/batch (anti data basi).
+- Scopus Q1-Q4 & Sinta 1-4 tetap. Tiap sub-skema mengubah standar penulisan,
+  bukan sekadar label.

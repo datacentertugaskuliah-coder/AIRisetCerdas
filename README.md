@@ -1,4 +1,4 @@
-# ARAS v9.3 — Asisten Riset Akademik System
+# ARAS v9.4 — Asisten Riset Akademik System
 
 (c) 2024-2026 **Alhumaira Store** · obrolanpintar1987@gmail.com
 
@@ -84,15 +84,24 @@ ARAS-v9.1/
 |- .gitattributes
 ```
 
-## Catatan v9.3
+## Catatan v9.4
 - Penguat 77 kata (tak berlabel) memperkuat M0–M7.
 - M7/C kini: 5 penelitian terdahulu → GAP → 1 penelitian saat ini yang menjawab
   GAP (kontribusi diusulkan, bukan data dikarang).
 - M7/D: novelty bertipe per tingkat — S1 Application, S2 Improvement,
   S3 Invention; BIMA & BRIN tetap (2 novelty multiyear).
 
-## Catatan v9.3
+## Catatan v9.4
 - M0 punya dua mode: Standar (default) dan Analisis Dokumen Manual.
 - Mode Analisis Dokumen: ARAS hanya menyiapkan prompt; PDF (≤10) Anda lampirkan
   langsung di mesin AI. ARAS tidak menerima atau memproses file.
 - M1–M7 tetap standar.
+
+## Catatan v9.4
+- Sub-skema kini untuk empat Tujuan: Hibah Bima (PDP, PDP Afirmasi, Fundamental
+  Reguler, PKDN, Terapan-Model, Terapan-Prototipe), BRIN (RIIM Kompetisi,
+  Ekspedisi, Invitasi, Kolaborasi, Start-Up), Publikasi Internasional (Scopus
+  Q1-Q4), Publikasi Sinta (Sinta 1-4).
+- Sub-skema masuk MCB dan menyetel standar penulisan di modul terminal.
+- Nama skema BIMA/BRIN diverifikasi dari sumber resmi; UI mengingatkan untuk
+  menyesuaikan dengan panduan tahun berjalan karena dapat berubah.

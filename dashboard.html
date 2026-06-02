@@ -1,5 +1,5 @@
 <!--
-  ARAS v9.3 — Dashboard Asisten Riset Akademik System
+  ARAS v9.4 — Dashboard Asisten Riset Akademik System
   (c) 2024-2026 Alhumaira Store · obrolanpintar1987@gmail.com
 
   Core Layer TERSEMBUNYI: konstanta JS (CORE_LAYER), tidak pernah dirender ke DOM,
@@ -123,7 +123,7 @@
       <div class="seal">AR</div>
       <div><h1>ARAS</h1><div class="tag">Asisten Riset Akademik System</div></div>
     </div>
-    <div class="ver">v9.3 · Beranda Proses</div>
+    <div class="ver">v9.4 · Beranda Proses</div>
   </header>
 
   <!-- ===== BERANDA: kendali konteks ===== -->
@@ -158,7 +158,7 @@
       <div style="grid-column:1/-1"><label class="fld">Topik / Kata Kunci</label>
         <input type="text" id="topik" placeholder="mis. deteksi dini stunting berbasis machine learning"></div>
     </div>
-    <div id="tierWrap" class="hide"><label class="fld" id="tierLabel">Tier Target</label>
+    <div id="tierWrap" class="hide"><label class="fld" id="tierLabel">Sub-skema / Tier</label>
       <select id="tier" style="max-width:260px"></select></div>
 
     <div id="warnSync" class="warnbar"></div>
@@ -222,7 +222,7 @@
   </section>
 
   <footer>
-    ARAS v9.3 · (c) 2024–2026 Alhumaira Store · obrolanpintar1987@gmail.com<br>
+    ARAS v9.4 · (c) 2024–2026 Alhumaira Store · obrolanpintar1987@gmail.com<br>
     Core Layer tersembunyi · integritas &amp; anti-halusinasi aktif · pengungkapan AI dipertahankan
   </footer>
 </div>
@@ -263,7 +263,14 @@ const BLABEL={umum:"Umum",soshum:"Sosial & Humaniora",saintek:"Sains & Teknologi
 const DB={umum:"Scopus, Google Scholar, Garuda",soshum:"Scopus, JSTOR, Garuda, DOAJ",saintek:"Scopus, ScienceDirect, PubMed",ilkom:"IEEE Xplore, ACM DL, Scopus"};
 const TLABEL={skripsi:"Skripsi",tesis:"Tesis",disertasi:"Disertasi",bima:"Hibah Bima",brin:"BRIN",intl:"Publikasi Internasional",sinta:"Publikasi Sinta",laporan:"Laporan Penelitian"};
 const TERM={skripsi:13,tesis:14,disertasi:15,bima:11,brin:12,intl:10,sinta:10,laporan:16};
-const TIERS={intl:["Scopus Q1","Scopus Q2","Scopus Q3","Scopus Q4"],sinta:["Sinta 1","Sinta 2","Sinta 3","Sinta 4"]};
+const TIERS={
+  intl:["Scopus Q1","Scopus Q2","Scopus Q3","Scopus Q4"],
+  sinta:["Sinta 1","Sinta 2","Sinta 3","Sinta 4"],
+  bima:["PDP — Penelitian Dosen Pemula","PDP Afirmasi","Penelitian Fundamental (Reguler)","PKDN — Kerja Sama Dalam Negeri","Penelitian Terapan — Luaran Model","Penelitian Terapan — Luaran Prototipe"],
+  brin:["RIIM Kompetisi","RIIM Ekspedisi","RIIM Invitasi","RIIM Kolaborasi","RIIM Start-Up"]
+};
+const TIERLABEL={intl:"Tier Scopus (standar internasional)",sinta:"Tier Sinta (standar nasional)",
+  bima:"Skema BIMA (DRTPM) — sesuaikan panduan tahun berjalan",brin:"Skema BRIN RIIM — sesuaikan panduan tahun berjalan"};
 let sel=0;
 
 function ctx(){
@@ -281,14 +288,19 @@ function ctx(){
               laporan:"Application Novelty (penerapan pada konteks laporan)",
               bima:"Kontribusi orisinal sesuai peta jalan (multiyear)",
               brin:"Kontribusi orisinal sesuai peta jalan RIIM (multiyear)"}[t]),
-    standar:(t==="intl")?("internasional bereputasi · "+($("tier").value||"Scopus Q1")):(t==="sinta")?("nasional bereputasi · "+($("tier").value||"Sinta 1")):"sesuai jenjang",
+    standar:(function(){const tv=(TIERS[t]?($("tier").value||TIERS[t][0]):"");
+      if(t==="intl")return "internasional bereputasi · "+tv;
+      if(t==="sinta")return "nasional bereputasi · "+tv;
+      if(t==="bima")return "panduan DRTPM/BIMA · "+tv;
+      if(t==="brin")return "panduan BRIN RIIM · "+tv;
+      return "sesuai jenjang";})(),
     term:TERM[t], tier:(TIERS[t]?($("tier").value||TIERS[t][0]):"")
   };
 }
 function mcb(c){return `=== MASTER CONTEXT BLOCK (MCB) ===
 Bidang : ${c.bl}
 Skema  : ${$("skema").value}
-Tujuan : ${c.tl}
+Tujuan : ${c.tl}${c.tier?`\nSub-skema/Tier : ${c.tier}`:""}
 Mode outline : ${c.mode}
 Novelty per judul : ${c.novelty}
 Tipe novelty : ${c.novType}
@@ -363,12 +375,13 @@ Jelaskan alasan pemilihan; jangan mengarang nilai statistik.`,
 Susun kerangka naskah publikasi (Introduction, Methods, Results, Discussion) untuk judul terpilih, di canvas BARU.
 Patuhi standar ${c.standar}; komposisi rujukan sesuai tier; sitasi APA dengan DOI [verifikasi].
 Sel angka hasil ditandai "[isi data hasil penelitian Anda]".`,
-11:`TUGAS M11 — Proposal Hibah BIMA. Tulis di canvas BARU.
-Susun proposal sesuai struktur BIMA (ringkasan, latar, tujuan, urgensi, tinjauan, metode, luaran, jadwal, RAB outline).
-${c.novelty} novelty (multiyear). Anti-fabrikasi; tandai standar kampus/panduan "[sesuaikan panduan]".`,
-12:`TUGAS M12 — Proposal BRIN RIIM Kompetisi. Tulis di canvas BARU.
-Susun proposal sesuai skema BRIN RIIM (latar, state of the art, peta jalan, ${c.novelty} novelty multiyear, metode, luaran, TKT, jadwal).
-Anti-fabrikasi DOI & data; tandai yang perlu verifikasi.`,
+11:`TUGAS M11 — Proposal Hibah BIMA · skema ${c.tier}. Tulis di canvas BARU.
+Susun proposal sesuai struktur BIMA untuk skema "${c.tier}" (ringkasan, latar, tujuan, urgensi, tinjauan, metode, luaran, jadwal, RAB outline).
+Sesuaikan fokus luaran dengan skemanya (mis. Terapan Luaran Prototipe → purwarupa; Luaran Model → model; Fundamental → kebaruan teori; PDP → penguatan dosen pemula).
+${c.novelty} novelty (multiyear). Anti-fabrikasi; tandai ketentuan angka/format "[sesuaikan panduan DRTPM tahun berjalan]".`,
+12:`TUGAS M12 — Proposal BRIN RIIM · skema ${c.tier}. Tulis di canvas BARU.
+Susun proposal sesuai skema "${c.tier}" (latar, state of the art, peta jalan, ${c.novelty} novelty multiyear, metode, luaran, TKT, jadwal).
+Sesuaikan dengan karakter skema RIIM yang dipilih. Anti-fabrikasi DOI & data; tandai "[sesuaikan panduan BRIN tahun berjalan]".`,
 13:`TUGAS M13 — Proposal Skripsi (S1). Tulis di canvas BARU.
 Susun proposal skripsi untuk judul terpilih: BAB I (latar, rumusan, tujuan, manfaat),
 BAB II (tinjauan + kerangka), BAB III (metode, mode ${c.mode}). Sitasi APA [verifikasi]; 1 novelty.`,
@@ -412,7 +425,7 @@ function renderRoute(){
   $("pNov").textContent=`novelty: ${c.novelty} · ${c.novType.split(" (")[0]}`;
   $("pStd").textContent=`standar: ${c.standar}`;
   const t=$("tujuan").value;
-  if(TIERS[t]){$("tierWrap").classList.remove("hide");$("tierLabel").textContent=(t==="intl")?"Tier Scopus (standar internasional)":"Tier Sinta (standar nasional)";
+  if(TIERS[t]){$("tierWrap").classList.remove("hide");$("tierLabel").textContent=TIERLABEL[t];
     if($("tier").dataset.k!==t){$("tier").innerHTML=TIERS[t].map(x=>`<option>${x}</option>`).join("");$("tier").dataset.k=t;}}
   else $("tierWrap").classList.add("hide");
   const norm={skripsi:"skripsi",tesis:"tesis",disertasi:"disertasi",bima:"hibah bima",brin:"brin",intl:"publikasi internasional",sinta:"publikasi sinta",laporan:"laporan penelitian"};
